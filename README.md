@@ -1,4 +1,4 @@
-# cql-metrics-exporter
+# cql-metrics-collector
 
 ## Abstract
 
@@ -12,7 +12,7 @@ them in Prometheus' text format on http://localhost:9500/metrics endpoint.
 ## Usage
 
 The service may be started within an unprivileged user context with
-`bin/cql-metrics-exporter`.
+`bin/cql-metrics-collector`.
 
 ## Metrics labels
 
