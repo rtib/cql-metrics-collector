@@ -1,0 +1,5 @@
+cql-metrics-collector (1.0-SNAPSHOT) stable; urgency=medium
+
+  * Release 1.0-SNAPSHOT of CQL-Metrics-Collector for Apache Cassandra.
+
+ -- Tibor Repasi <rtib@users.noreply.github.com>  Wed, 01 Jan 2025 23:39:25 +0100

@@ -1,0 +1,23 @@
+Source: cql-metrics-collector
+Section: java
+Priority: optional
+Maintainer: Tibor Répási <rtib@users.noreply.github.com>
+Build-Depends:
+ debhelper (>= 10),
+ openjdk-11-jdk-headless,
+ maven
+Standards-Version: 4.1.0
+Vcs-Git: https://github.com/rtib/cql-metrics-collector.git
+Vcs-Browser: https://github.com/rtib/cql-metrics-collector
+Homepage: https://rtib.github.io/cql-metrics-collector/
+
+Package: cql-metrics-collector
+Architecture: all
+Depends: ${misc:Depends}, ${maven:Depends}, cassandra (>= 4.0)
+Suggests: ${maven:OptionalDepends}
+Description: CQL-Metrics-Collector for Apache Cassandra
+ The cql-metrics-collector is collecting metrics from Apache Cassandra
+ versions 4.0 and later to export them to Prometheus using its text format
+ protocol. As metrics of Apache Cassandra are bound to individual nodes,
+ the collector is designed to run aside of a Cassandra node, even if it is
+ implemented as a standard CQL client.

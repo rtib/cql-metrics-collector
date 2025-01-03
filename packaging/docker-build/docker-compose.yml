@@ -1,0 +1,10 @@
+
+services:
+  builder-debian-11:
+    build:
+      context: ../..
+      dockerfile: packaging/docker-build/Dockerfile.debian-11
+    volumes:
+      - ../..:/usr/src/app/cql-metrics-collector
+      - ../../packages:/usr/src/app/packages
+      - ./scripts:/usr/src/app/scripts

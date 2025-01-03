@@ -1,0 +1,2 @@
+target/appassembler/bin/cql-metrics-collector /usr/share/cql-metrics-collector/bin
+target/appassembler/lib/* /usr/share/cql-metrics-collector/lib

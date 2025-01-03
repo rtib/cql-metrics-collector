@@ -20,3 +20,14 @@ nb-configuration.xml
 
 nbactions.xml
 /nbproject/
+
+debian/maven-repo/
+
+.vscode/
+
+debian/.debhelper/
+debian/cql-metrics-collector/
+debian/cql-metrics-collector.substvars
+debian/debhelper-build-stamp
+debian/files
+packages/

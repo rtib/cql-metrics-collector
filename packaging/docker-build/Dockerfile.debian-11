@@ -1,0 +1,22 @@
+FROM debian:bullseye
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG BUILD_IMAGE
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# use a common app path, copied from python-onbuild:latest
+ENV WORKDIR /usr/src/app
+RUN mkdir -p ${WORKDIR}
+WORKDIR ${WORKDIR}
+RUN echo "Acquire::http::Pipeline-Depth 0;" >> /etc/apt/apt.conf
+
+RUN apt-get update \
+    && apt-get install -y \
+    openjdk-11-jdk-headless \
+    maven \
+    debhelper \
+    devscripts \
+    build-essential
+
+COPY packaging/docker-build/docker-entrypoint.sh ${WORKDIR}
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]

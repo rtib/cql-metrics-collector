@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE=1
+export DH_OPTIONS
+
+build:
+	mvn package
+
+override_dh_clean:
+	dh_clean
+	rm -rf debian/tmp
+	mvn clean
+
+override_dh_auto_build:
+	mvn package
+
+override_dh_auto_configure:
+	# nothing to do
+
+override_dh_auto_test:
+	# nothing to do
+
+override_dh_auto_install:
+	dh_auto_install
+
+%:
+	dh $@
