@@ -17,7 +17,7 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<cassandra.driver.version>4.18.1</cassandra.driver.version>
-		<logback.version>1.5.12</logback.version>
+		<logback.version>1.5.13</logback.version>
 	</properties>
 	<dependencies>
 		<dependency>
