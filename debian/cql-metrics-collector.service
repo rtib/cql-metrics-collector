@@ -1,0 +1,13 @@
+[Unit]
+Description=
+
+[Service]
+Type=simple
+User=cql-metrics-collector
+Group=cql-metrics-collector
+ExecStart=/usr/share/cql-metrics-collector/bin/cql-metrics-collector
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
