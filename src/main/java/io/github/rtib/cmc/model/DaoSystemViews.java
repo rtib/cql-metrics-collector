@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 T. Repasi <rtib@users.noreply.github.com>.
+ * Copyright 2024-2025 T. Repasi <rtib@users.noreply.github.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import io.github.rtib.cmc.model.system_views.ThreadPools;
 /**
  * Interface of a data access object allowing to access information within system_views.
  * 
- * @author T. Repasi <rtib@users.noreply.github.com>
+ * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 @Dao
 public interface DaoSystemViews {

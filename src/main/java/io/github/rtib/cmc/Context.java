@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 T. Repasi <rtib@users.noreply.github.com>.
+ * Copyright 2024-2025 T. Repasi <rtib@users.noreply.github.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Application context.
  * 
- * @author T. Repasi <rtib@users.noreply.github.com>
+ * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public final class Context {
     private static final Context instance;

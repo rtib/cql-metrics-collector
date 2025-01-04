@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 T. Repasi <rtib@users.noreply.github.com>.
+ * Copyright 2024-2025 T. Repasi <rtib@users.noreply.github.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  *
- * @author T. Repasi <rtib@users.noreply.github.com>
+ * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 @Entity
 @PropertyStrategy(mutable = false)

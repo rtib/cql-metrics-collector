@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 T. Repasi <rtib@users.noreply.github.com>.
+ * Copyright 2024-2025 T. Repasi <rtib@users.noreply.github.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package io.github.rtib.cmc;
 /**
  * Exception to be thrown from Context class.
  * 
- * @author T. Repasi <rtib@users.noreply.github.com>
+ * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class ContextException extends Exception {
 
