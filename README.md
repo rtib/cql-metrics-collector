@@ -39,3 +39,9 @@ accessed and exported as listed:
 blocked_tasks_all_time or pending_tasks
   * `cassandra_completed_tasks_counter` - labeled with `name` as above and `metric`
 completed_tasks
+* `caches`
+  * `cassandra_system_caches` (gauge) - labeled with `name` of the system cache and
+`metric` referring to one of capacity_bytes, hit_ratio, recent_hit_rate_per_second,
+recent_request_rate_per_second or size_bytes
+  * `cassandra_system_cache_counter` -  labeled with `name` as above and `metric`
+referring to one of entry_count, hit_count or request_count
