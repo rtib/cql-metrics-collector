@@ -34,7 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * HTTP server exporting the metrics.
+ * 
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class HTTPServer implements Closeable {

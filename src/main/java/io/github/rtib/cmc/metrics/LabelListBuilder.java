@@ -16,6 +16,7 @@
 package io.github.rtib.cmc.metrics;
 
 import io.github.rtib.cmc.model.system_schema.TableName;
+import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +64,25 @@ public class LabelListBuilder {
                     .build();
         } catch (MetricException ex) {
             LOG.atError().log("Failed to create List<Label> of threadpool/metric {}/{}.", tp, metricName, ex);
+        }
+        return labels;
+    }
+    
+    /**
+     * Convert a cache and metric name to a list of label.
+     * @param cache CacheName instance
+     * @param metricName metric component name
+     * @return 
+     */
+    public static List<Label> valueOf(CacheName cache, String metricName) {
+        List<Label> labels = null;
+        try {
+            labels = new LabelListBuilder()
+                    .addLabel("cache", cache.name())
+                    .addLabel("metric", metricName)
+                    .build();
+        } catch (MetricException ex) {
+            LOG.atError().log("Failed to create List<Label> of cache/metric {}/{}.", cache, metricName, ex);
         }
         return labels;
     }

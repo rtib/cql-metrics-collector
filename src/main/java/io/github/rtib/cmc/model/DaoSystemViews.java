@@ -19,6 +19,8 @@ import com.datastax.oss.driver.api.core.PagingIterable;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Query;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
+import io.github.rtib.cmc.model.system_views.CacheName;
+import io.github.rtib.cmc.model.system_views.Caches;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
@@ -54,4 +56,19 @@ public interface DaoSystemViews {
      */
     @Select
     ThreadPools threadPool(String name);
+    
+    /**
+     * List cache names.
+     * @return 
+     */
+    @Query("SELECT name FROM system_views.caches")
+    PagingIterable<CacheName> listCaches();
+    
+    /**
+     * 
+     * @param name
+     * @return 
+     */
+    @Select
+    Caches caches(String name);
 }

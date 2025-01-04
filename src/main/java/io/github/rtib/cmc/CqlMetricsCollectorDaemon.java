@@ -19,6 +19,7 @@ import static io.github.rtib.cmc.PropertyHelper.JAVA_VERSION;
 import static io.github.rtib.cmc.PropertyHelper.JAVA_VM_NAME;
 import io.github.rtib.cmc.exporter.HTTPServer;
 import io.github.rtib.cmc.exporter.HTTPServerException;
+import io.github.rtib.cmc.queryTasks.CachesCollector;
 import io.github.rtib.cmc.queryTasks.CollectorException;
 import io.github.rtib.cmc.queryTasks.DiskUsageCollector;
 import io.github.rtib.cmc.queryTasks.ThreadPoolsCollector;
@@ -52,6 +53,7 @@ public class CqlMetricsCollectorDaemon {
         try{
             new DiskUsageCollector().activate();
             new ThreadPoolsCollector().activate();
+            new CachesCollector().activate();
         } catch (CollectorException ex) {
             LOG.debug("Failed to initialize DiskUsageCollector.", ex);
         }
