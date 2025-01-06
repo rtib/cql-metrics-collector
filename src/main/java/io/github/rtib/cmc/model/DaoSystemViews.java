@@ -21,7 +21,13 @@ import com.datastax.oss.driver.api.mapper.annotations.Query;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
 import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.Caches;
+import io.github.rtib.cmc.model.system_views.CoordinatorReadLatency;
+import io.github.rtib.cmc.model.system_views.CoordinatorScanLatency;
+import io.github.rtib.cmc.model.system_views.CoordinatorWriteLatency;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
+import io.github.rtib.cmc.model.system_views.LocalReadLatency;
+import io.github.rtib.cmc.model.system_views.LocalScanLatency;
+import io.github.rtib.cmc.model.system_views.LocalWriteLatency;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
 
@@ -65,10 +71,64 @@ public interface DaoSystemViews {
     PagingIterable<CacheName> listCaches();
     
     /**
-     * 
-     * @param name
+     * Get metrics of the specified system cache.
+     * @param name system cache name
      * @return 
      */
     @Select
     Caches caches(String name);
+    
+    /**
+     * Get coordinator read latency metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    CoordinatorReadLatency CoordinatorReadLatency(String keyspace_name, String table_name);
+    
+    /**
+     * Get coordinator write latency metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    CoordinatorWriteLatency CoordinatorWriteLatency(String keyspace_name, String table_name);
+    
+    /**
+     * Get coordinator scan latency metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    CoordinatorScanLatency CoordinatorScanLatency(String keyspace_name, String table_name);
+    
+    /**
+     * Get local read latency metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    LocalReadLatency LocalReadLatency(String keyspace_name, String table_name);
+    
+    /**
+     * Get local write latency metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    LocalWriteLatency LocalWriteLatency(String keyspace_name, String table_name);
+    
+    /**
+     * Get local scan latency metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    LocalScanLatency LocalScanLatency(String keyspace_name, String table_name);
 }

@@ -24,15 +24,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Abstract class implementing common functions of collector classes.
+ * Abstract class implementing common functions of collectors.
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractCollector implements ICollector {
     protected final Context context = Context.getInstance();
     protected final Map<MetricsIdentifier,ScheduledFuture<?>> collectors = new ConcurrentHashMap<>();
+    protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    protected final String KEYSPACE = "system_views";
+    protected final String TABLE;
+
     protected ScheduledFuture<?> updateTask;
+
+    public AbstractCollector(String source_table) {
+        this.TABLE = source_table;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return context.getConfigFor(this.getClass()).getBoolean("enabled");
+    }
 
     @Override
     public void deactivate() {
@@ -103,6 +118,31 @@ public abstract class AbstractCollector implements ICollector {
     void clearCollectors() {
         collectors.values().forEach((ScheduledFuture<?> t) -> t.cancel(true));
         collectors.clear();
+    }
+    
+    protected static class CollectorConfig {
+        protected Duration metricsCollectionInterval = Duration.ofSeconds(10);
+        protected Duration updateInterval = Duration.ofMinutes(1);
+
+        public CollectorConfig() {
+        }
+
+        public Duration getMetricsCollectionInterval() {
+            return metricsCollectionInterval;
+        }
+
+        public Duration getUpdateInterval() {
+            return updateInterval;
+        }
+
+        public void setMetricsCollectionInterval(Duration metricsCollectionInterval) {
+            this.metricsCollectionInterval = metricsCollectionInterval;
+        }
+
+        public void setUpdateInterval(Duration updateInterval) {
+            this.updateInterval = updateInterval;
+        }
+        
     }
 }
 

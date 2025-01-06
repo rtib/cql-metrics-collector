@@ -22,6 +22,12 @@ package io.github.rtib.cmc.queryTasks;
 public interface ICollector {
 
     /**
+     * Check whether or not the collector is enabled by configuration.
+     * @return true if the collector is enabled
+     */
+    boolean isEnabled();
+    
+    /**
      * Activate the collector instance by setting up its metrics and update
      * task.
      * @throws CollectorException in case of any failure preventing activation.

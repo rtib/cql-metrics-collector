@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Collector of thread pools metrics.
@@ -39,15 +37,14 @@ import org.slf4j.LoggerFactory;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class ThreadPoolsCollector extends AbstractCollector {
-    private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolsCollector.class);
-
-    private static final String KEYSPACE = "system_views";
-    private static final String TABLE = "thread_pools";
-    
     private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
 
     private Metric metricGauge;
     private Metric metricCounter;
+
+    public ThreadPoolsCollector() {
+        super("thread_pools");
+    }
 
     @Override
     public void activate() throws CollectorException {
@@ -115,7 +112,6 @@ public class ThreadPoolsCollector extends AbstractCollector {
     }
 
     private class Collector extends Thread {
-
         private final ThreadPoolName threadpool;
         private final String counterName = "completed_tasks";
         private final Set<String> gaugeNames = Set.of(

@@ -34,7 +34,7 @@ import java.util.Objects;
 @Entity
 @CqlName("thread_pools")
 @PropertyStrategy(mutable = false)
-public class ThreadPoolName implements MetricsIdentifier {
+public final class ThreadPoolName implements MetricsIdentifier {
 
     private final String name;
     

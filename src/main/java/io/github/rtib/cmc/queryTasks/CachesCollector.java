@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Collector of system cache metrics.
@@ -39,15 +37,15 @@ import org.slf4j.LoggerFactory;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class CachesCollector extends AbstractCollector {
-    private static final Logger LOG = LoggerFactory.getLogger(CachesCollector.class);
-    
-    private static final String KEYSPACE = "system_views";
-    private static final String TABLE = "caches";
     
     private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
     
     private Metric metricGauge;
     private Metric metricCounter;
+
+    public CachesCollector() {
+        super("caches");
+    }
 
     @Override
     public void activate() throws CollectorException {
@@ -116,7 +114,6 @@ public class CachesCollector extends AbstractCollector {
     }
     
     private class Collector extends Thread {
-        
         private final CacheName cacheName;
         private final Set<String> counterNames = Set.of(
                 "entry_count",

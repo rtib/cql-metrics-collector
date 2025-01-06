@@ -15,9 +15,6 @@
  */
 package io.github.rtib.cmc.queryTasks;
 
-import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
-import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
-import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.Metric;
@@ -27,25 +24,20 @@ import io.github.rtib.cmc.metrics.Repository;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Collector of disk usage of every table.
  * 
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
-public class DiskUsageCollector extends AbstractCollector {
-    private static final Logger LOG = LoggerFactory.getLogger(DiskUsageCollector.class);
-    
-    private final String KEYSPACE = "system_views";
-    private final String TABLE = "disk_usage";
-    
-    private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
+public class DiskUsageCollector extends AbstractTableCollector {
     private Metric metric;
+
+    public DiskUsageCollector() {
+        super("disk_usage");
+    }
 
     @Override
     public void activate() throws CollectorException {
@@ -84,43 +76,12 @@ public class DiskUsageCollector extends AbstractCollector {
         return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
     }
 
-    private List<TableName> listTables() {
-        if (config.isIncludeSystemTables())
-            return context.systemSchemaDao.listAllTables().all();
-        else {
-            List<TableName> list = new ArrayList<>();
-            for (KeyspaceMetadata keyspace : context.cqlSession.getMetadata().getKeyspaces().values()) {
-                for (TableMetadata table : keyspace.getTables().values()) {
-                    list.add(new TableName(keyspace.getName().asCql(true), table.getName().asCql(true)));
-                }
-            }
-            return List.copyOf(list);
-        }
-    }
-    
-    private void update() {
-        LOG.info("Updating.");
-        List<TableName> tableList = listTables();
-        LOG.debug("Found tables: {}", tableList);
-        retainAllCollectors(tableList);
-        for (var table : tableList) {
-            LOG.debug("Checking {}", table);
-            if (collectors.containsKey(table))
-                continue;
-            
-            LOG.debug("Creating Collector for {}", table);
-            addCollector(
-                    table,
-                    new Collector(table),
-                    config.getMetricsCollectionInterval()
-            );
-        }
-        LOG.info("Engaged {} collector: {}", collectors.size(), collectors.keySet());
+    @Override
+    protected Thread getCollector(TableName table) throws MetricException {
+        return new Collector(table);
     }
 
     private class Collector extends Thread {
-        private final Logger LOG = LoggerFactory.getLogger(Collector.class);
-
         private final TableName table;
         private final List<Label> labels;
 
@@ -148,36 +109,5 @@ public class DiskUsageCollector extends AbstractCollector {
             LOG.info("Started collector of {}", table);
             super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         }
-    }
-    
-    public static final class Config {
-        private boolean includeSystemTables = false;
-        private Duration updateInterval = Duration.ofMinutes(1);
-        private Duration metricsCollectionInterval = Duration.ofSeconds(10);
-
-        public Duration getUpdateInterval() {
-            return updateInterval;
-        }
-
-        public Duration getMetricsCollectionInterval() {
-            return metricsCollectionInterval;
-        }
-
-        public boolean isIncludeSystemTables() {
-            return includeSystemTables;
-        }
-
-        public void setIncludeSystemTables(boolean includeSystemTables) {
-            this.includeSystemTables = includeSystemTables;
-        }
-
-        public void setUpdateInterval(Duration updateInterval) {
-            this.updateInterval = updateInterval;
-        }
-
-        public void setMetricsCollectionInterval(Duration metricsCollectionInterval) {
-            this.metricsCollectionInterval = metricsCollectionInterval;
-        }
-
     }
 }

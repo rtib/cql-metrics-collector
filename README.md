@@ -34,14 +34,16 @@ accessed and exported as listed:
 * `disk_usage`
   * `cassandra_disk_usage` (gauge) - labeled with `keyspace` and `table`
 * `thread_pools`
-  * `cassandra_thread_pools` (gauge) - labeled with `name` of the threadpool and
-`metric` referring to one of active_tasks, active_tasks_limit, blocked_tasks,
-blocked_tasks_all_time or pending_tasks
-  * `cassandra_completed_tasks_counter` - labeled with `name` as above and `metric`
-completed_tasks
+  * `cassandra_thread_pools` (gauge) - labeled with `name` of the threadpool and `metric` referring to one of active_tasks, active_tasks_limit, blocked_tasks, blocked_tasks_all_time or pending_tasks
+  * `cassandra_completed_tasks_counter` - labeled with `name` as above and `metric` completed_tasks
 * `caches`
-  * `cassandra_system_caches` (gauge) - labeled with `name` of the system cache and
-`metric` referring to one of capacity_bytes, hit_ratio, recent_hit_rate_per_second,
-recent_request_rate_per_second or size_bytes
-  * `cassandra_system_cache_counter` -  labeled with `name` as above and `metric`
-referring to one of entry_count, hit_count or request_count
+  * `cassandra_system_caches` (gauge) - labeled with `name` of the system cache and `metric` referring to one of capacity_bytes, hit_ratio, recent_hit_rate_per_second, recent_request_rate_per_second or size_bytes
+  * `cassandra_system_cache_counter` -  labeled with `name` as above and `metric` referring to one of entry_count, hit_count or request_count
+* `coordinator_read_latency`, `coordinator_scan_latency`, `coordinator_write_latency`, `local_read_latency`, `local_scan_latency`, `local_write_latency`
+  * all above latency metrics tables are exoprted using four metric names:
+    * `cassandra_<basename>_count` - exporting the count field of the base table
+    * `cassandra_<basename>_max` - exporting the max latency in milliseconds
+    * `cassandra_<basename>_buckets` - exporting p50th and p99th buckets in milliseconds
+    * `cassandra_<basename>_rate` - exporting the request rate per seconds
+  * all metrics are labeled with `keyspace` and `table` referring to the subject of the metrics
+  * the buckets are additionally labeled with `quantile`

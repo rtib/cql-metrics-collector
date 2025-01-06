@@ -22,8 +22,8 @@ package io.github.rtib.cmc.metrics;
 public enum MetricType {
     COUNTER ("counter"),
     GAUGE ("gauge"),
-    // HISTOGRAM ("histogram"),
-    // SUMMARY ("summary"),
+    HISTOGRAM ("histogram"),
+    SUMMARY ("summary"),
     UNTYPED ("untyped")
     ;
     private String name;

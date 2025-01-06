@@ -21,7 +21,13 @@ import io.github.rtib.cmc.exporter.HTTPServer;
 import io.github.rtib.cmc.exporter.HTTPServerException;
 import io.github.rtib.cmc.queryTasks.CachesCollector;
 import io.github.rtib.cmc.queryTasks.CollectorException;
+import io.github.rtib.cmc.queryTasks.CoordinatorReadLatencyCollector;
+import io.github.rtib.cmc.queryTasks.CoordinatorScanLatencyCollector;
+import io.github.rtib.cmc.queryTasks.CoordinatorWriteLatencyCollector;
 import io.github.rtib.cmc.queryTasks.DiskUsageCollector;
+import io.github.rtib.cmc.queryTasks.LocalReadLatencyCollector;
+import io.github.rtib.cmc.queryTasks.LocalScanLatencyCollector;
+import io.github.rtib.cmc.queryTasks.LocalWriteLatencyCollector;
 import io.github.rtib.cmc.queryTasks.ThreadPoolsCollector;
 import java.util.logging.Level;
 import org.slf4j.Logger;
@@ -54,6 +60,12 @@ public class CqlMetricsCollectorDaemon {
             new DiskUsageCollector().activate();
             new ThreadPoolsCollector().activate();
             new CachesCollector().activate();
+            new CoordinatorReadLatencyCollector().activate();
+            new CoordinatorWriteLatencyCollector().activate();
+            new CoordinatorScanLatencyCollector().activate();
+            new LocalReadLatencyCollector().activate();
+            new LocalWriteLatencyCollector().activate();
+            new LocalScanLatencyCollector().activate();
         } catch (CollectorException ex) {
             LOG.debug("Failed to initialize DiskUsageCollector.", ex);
         }

@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Build a List<Label> programmatically. 
+ * Build a label list programmatically. 
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class LabelListBuilder {
@@ -114,6 +114,16 @@ public class LabelListBuilder {
      */
     public LabelListBuilder addLabel(Label label) {
         list.add(label);
+        return this;
+    }
+    
+    /**
+     * Add a list of labels.
+     * @param labels List of labels to be added
+     * @return this builder instance
+     */
+    public LabelListBuilder addLabels(List<Label> labels) {
+        list.addAll(labels);
         return this;
     }
     
