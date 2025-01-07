@@ -1,5 +1,5 @@
 [Unit]
-Description=
+Description=Metrics collector from Apache Cassandra and exporter to Prometheus
 
 [Service]
 Type=simple
