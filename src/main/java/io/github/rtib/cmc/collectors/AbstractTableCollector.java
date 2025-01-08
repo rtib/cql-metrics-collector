@@ -19,6 +19,7 @@ import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
 import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.metrics.MetricException;
+import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Abstract class collecting metrics on a per table base.
+ * Abstract class collecting metrics on a per instance base.
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractTableCollector extends AbstractCollector {
@@ -35,7 +36,7 @@ public abstract class AbstractTableCollector extends AbstractCollector {
     protected final TableCollectorConfig config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), TableCollectorConfig.class);
 
     /**
-     * Initializing a collector for a given source table.
+     * Initializing a collector for a given source instance.
      * @param source_table 
      */
     public AbstractTableCollector(String source_table) {
@@ -69,27 +70,26 @@ public abstract class AbstractTableCollector extends AbstractCollector {
      */
     protected void update() {
         LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
-        List<TableName> tableList = listTables(context.getConfigFor(this.getClass()).getBoolean("includeSystemTables"));
+        List<? extends MetricsIdentifier> tableList = getInstances();
         LOG.debug("Found tables: {}", tableList);
         
         retainAllCollectors(tableList);
         int numKept = collectors.size();
         int numNew = 0;
-        for (TableName table : tableList) {
-            LOG.debug("Checking {}", table);
-            if (collectors.containsKey(table)) {
+        for (MetricsIdentifier instance : tableList) {
+            LOG.debug("Checking {}", instance);
+            if (collectors.containsKey(instance)) {
                 continue;
             }
 
             try {
-                addCollector(
-                        table,
-                        createCollectorTask(table),
+                addCollector(instance,
+                        createCollectorTask(instance),
                         config.getMetricsCollectionInterval()
                 );
                 numNew++;
             } catch (MetricException ex) {
-                LOG.error("Couldn't create {} task for {}.", this.getClass().getSimpleName(), table, ex);
+                LOG.error("Couldn't create {} task for {}.", this.getClass().getSimpleName(), instance, ex);
                 throw new RuntimeException(ex);
             }
         }
@@ -98,13 +98,21 @@ public abstract class AbstractTableCollector extends AbstractCollector {
     }
 
     /**
+     * Get the list of instances to be collected by this collector.
+     * @return 
+     */
+    protected List<? extends MetricsIdentifier> getInstances() {
+        return listTables(context.getConfigFor(this.getClass()).getBoolean("includeSystemTables"));
+    }
+    
+    /**
      * This is to create a thread instance implementing the collector task for
-     * a given table.
-     * @param table Table which metrics are to be collected.
+     * a given instance.
+     * @param id identifier which metrics are to be collected.
      * @return the collector thread.
      * @throws MetricException 
      */
-    protected abstract Thread createCollectorTask(TableName table) throws MetricException;
+    protected abstract Thread createCollectorTask(MetricsIdentifier id) throws MetricException;
 
     /**
      * Configuration bean.

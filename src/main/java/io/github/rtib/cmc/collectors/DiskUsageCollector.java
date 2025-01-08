@@ -21,6 +21,7 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
 import java.time.Duration;
@@ -81,17 +82,17 @@ public class DiskUsageCollector extends AbstractTableCollector {
     }
 
     @Override
-    protected Thread createCollectorTask(TableName table) throws MetricException {
-        return new Collector(table);
+    protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
+        return new Collector(id);
     }
 
     private class Collector extends Thread {
         private final TableName table;
         private final List<Label> labels;
 
-        public Collector(TableName table) {
-            this.table = table;
-            this.labels = LabelListBuilder.valueOf(table);
+        public Collector(MetricsIdentifier id) {
+            this.table = (TableName) id;
+            this.labels = LabelListBuilder.valueOf(this.table);
             metric.addInstance(labels);
         }
 

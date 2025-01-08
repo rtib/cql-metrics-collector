@@ -21,6 +21,7 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import io.github.rtib.cmc.model.system_views.Latency;
 import java.time.Duration;
@@ -116,8 +117,8 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
         protected final TableName table;
         protected final Map<String,List<Label>> metricLabels;
         
-        public Collector(TableName table) throws MetricException {
-            this.table = table;
+        public Collector(MetricsIdentifier id) throws MetricException {
+            table = (TableName) id;
             List<Label> tabLabel = LabelListBuilder.valueOf(table);
             Map<String,List<Label>> labelmap = new HashMap<>();
             labelmap.put("count", tabLabel);

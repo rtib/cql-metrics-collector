@@ -16,7 +16,7 @@
 package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
-import io.github.rtib.cmc.model.system_schema.TableName;
+import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.Latency;
 
 /**
@@ -30,8 +30,8 @@ public final class CoordinatorScanLatencyCollector extends AbstractLatencyCollec
     }
 
     @Override
-    protected Thread createCollectorTask(TableName table) throws MetricException {
-        return new Collector(table) {
+    protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
+        return new Collector(id) {
             @Override
             protected Latency getLatency() {
                 return context.systemViewsDao.CoordinatorScanLatency(table.keyspace_name(), table.table_name());
