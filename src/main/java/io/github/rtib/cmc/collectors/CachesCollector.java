@@ -22,6 +22,7 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.Caches;
 import java.time.Duration;
@@ -96,28 +97,14 @@ public class CachesCollector extends AbstractCollector {
         return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
     }
     
-    private void update() {
-        LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
-        List<CacheName> caches = context.systemViewsDao.listCaches().all();
-        LOG.debug("Found system caches: {}", caches);
-        
-        retainAllCollectors(caches);
-        int numKept = collectors.size();
-        int numNew = 0;
-        for (CacheName cache : caches) {
-            LOG.debug("Checking {}", cache);
-            if (collectors.containsKey(cache))
-                continue;
-            
-            addCollector(
-                    cache,
-                    new Collector(cache),
-                    config.getMetricsCollectionInterval()
-            );
-            numNew++;
-        }
-        LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.",
-                this.getClass().getSimpleName(), numKept, numNew, collectors.size());
+    @Override
+    protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
+        return new Collector(id);
+    }
+
+    @Override
+    protected List<? extends MetricsIdentifier> getInstances() {
+        return context.systemViewsDao.listCaches().all();
     }
     
     private class Collector extends Thread {
@@ -136,8 +123,8 @@ public class CachesCollector extends AbstractCollector {
         );
         private final Map<String,List<Label>> metricLabels = new HashMap<>();
         
-        public Collector(CacheName cacheName) {
-            this.cacheName = cacheName;
+        public Collector(MetricsIdentifier id) {
+            cacheName = (CacheName) id;
             for (var gaugeName : gaugeNames) {
                 var labels = LabelListBuilder.valueOf(cacheName, gaugeName);
                 metricLabels.put(gaugeName, labels);

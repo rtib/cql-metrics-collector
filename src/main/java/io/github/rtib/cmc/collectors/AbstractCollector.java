@@ -15,10 +15,13 @@
  */
 package io.github.rtib.cmc.collectors;
 
+import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.Context;
+import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
@@ -35,6 +38,7 @@ public abstract class AbstractCollector implements ICollector {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCollector.class);
 
     protected final Context context = Context.getInstance();
+    protected final CollectorConfig config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), CollectorConfig.class);
     protected final Map<MetricsIdentifier,ScheduledFuture<?>> collectors = new ConcurrentHashMap<>();
     protected final String KEYSPACE = "system_views";
     protected final String TABLE;
@@ -122,6 +126,50 @@ public abstract class AbstractCollector implements ICollector {
     void clearCollectors() {
         collectors.values().forEach((ScheduledFuture<?> t) -> t.cancel(true));
         collectors.clear();
+    }
+
+    /**
+     * This is to create a thread instance implementing the collector task for
+     * a given instance.
+     * @param id identifier which metrics are to be collected.
+     * @return the collector thread.
+     * @throws MetricException
+     */
+    protected abstract Thread createCollectorTask(MetricsIdentifier id) throws MetricException;
+
+    /**
+     * Get the list of instances to be collected by this collector.
+     * @return
+     */
+    protected abstract List<? extends MetricsIdentifier> getInstances();
+
+    /**
+     * Updating the collector threads run by this class. It is enumerating all
+     * tables and checking for collectors for each table. Creates collector
+     * tasks for recently created tables and removes collector tasks of dropped
+     * tables.
+     */
+    protected void update() {
+        LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
+        List<? extends MetricsIdentifier> tableList = getInstances();
+        LOG.debug("Found tables: {}", tableList);
+        retainAllCollectors(tableList);
+        int numKept = collectors.size();
+        int numNew = 0;
+        for (MetricsIdentifier instance : tableList) {
+            LOG.debug("Checking {}", instance);
+            if (collectors.containsKey(instance)) {
+                continue;
+            }
+            try {
+                addCollector(instance, createCollectorTask(instance), config.getMetricsCollectionInterval());
+                numNew++;
+            } catch (MetricException ex) {
+                LOG.error("Couldn't create {} task for {}.", this.getClass().getSimpleName(), instance, ex);
+                throw new RuntimeException(ex);
+            }
+        }
+        LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.", this.getClass().getSimpleName(), numKept, numNew, collectors.size());
     }
     
     protected static class CollectorConfig {

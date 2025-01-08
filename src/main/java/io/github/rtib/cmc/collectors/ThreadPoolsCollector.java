@@ -22,6 +22,7 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
 import java.time.Duration;
@@ -96,28 +97,14 @@ public class ThreadPoolsCollector extends AbstractCollector {
         return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
     }
 
-    private void update() {
-        LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
-        List<ThreadPoolName> threadpools = context.systemViewsDao.listThreadPools().all();
-        LOG.debug("Found threadpools: {}", threadpools);
-        
-        retainAllCollectors(threadpools);
-        int numKept = collectors.size();
-        int numNew = 0;
-        for (ThreadPoolName tp : threadpools) {
-            LOG.debug("Checking {}", tp);
-            if (collectors.containsKey(tp))
-                continue;
-            
-            addCollector(
-                    tp,
-                    new Collector(tp),
-                    config.getMetricsCollectionInterval()
-            );
-            numNew++;
-        }
-        LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.",
-                this.getClass().getSimpleName(), numKept, numNew, collectors.size());
+    @Override
+    protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
+        return new Collector(id);
+    }
+
+    @Override
+    protected List<? extends MetricsIdentifier> getInstances() {
+        return context.systemViewsDao.listThreadPools().all();
     }
 
     private class Collector extends Thread {
@@ -132,8 +119,8 @@ public class ThreadPoolsCollector extends AbstractCollector {
         );
         private final Map<String,List<Label>> metricLabels = new HashMap<>();
 
-        public Collector(ThreadPoolName threadpool) {
-            this.threadpool = threadpool;
+        public Collector(MetricsIdentifier id) {
+            threadpool = (ThreadPoolName) id;
             for (var gaugeName : gaugeNames) {
                 var labels = LabelListBuilder.valueOf(threadpool, gaugeName);
                 metricLabels.put(gaugeName, labels);

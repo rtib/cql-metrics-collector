@@ -18,7 +18,6 @@ package io.github.rtib.cmc.collectors;
 import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
 import com.typesafe.config.ConfigBeanFactory;
-import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import java.util.ArrayList;
@@ -62,57 +61,10 @@ public abstract class AbstractTableCollector extends AbstractCollector {
         }
     }
 
-    /**
-     * Updating the collector threads run by this class. It is enumerating all
-     * tables and checking for collectors for each table. Creates collector
-     * tasks for recently created tables and removes collector tasks of dropped
-     * tables.
-     */
-    protected void update() {
-        LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
-        List<? extends MetricsIdentifier> tableList = getInstances();
-        LOG.debug("Found tables: {}", tableList);
-        
-        retainAllCollectors(tableList);
-        int numKept = collectors.size();
-        int numNew = 0;
-        for (MetricsIdentifier instance : tableList) {
-            LOG.debug("Checking {}", instance);
-            if (collectors.containsKey(instance)) {
-                continue;
-            }
-
-            try {
-                addCollector(instance,
-                        createCollectorTask(instance),
-                        config.getMetricsCollectionInterval()
-                );
-                numNew++;
-            } catch (MetricException ex) {
-                LOG.error("Couldn't create {} task for {}.", this.getClass().getSimpleName(), instance, ex);
-                throw new RuntimeException(ex);
-            }
-        }
-        LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.",
-                this.getClass().getSimpleName(), numKept, numNew, collectors.size());
-    }
-
-    /**
-     * Get the list of instances to be collected by this collector.
-     * @return 
-     */
+    @Override
     protected List<? extends MetricsIdentifier> getInstances() {
         return listTables(context.getConfigFor(this.getClass()).getBoolean("includeSystemTables"));
     }
-    
-    /**
-     * This is to create a thread instance implementing the collector task for
-     * a given instance.
-     * @param id identifier which metrics are to be collected.
-     * @return the collector thread.
-     * @throws MetricException 
-     */
-    protected abstract Thread createCollectorTask(MetricsIdentifier id) throws MetricException;
 
     /**
      * Configuration bean.
