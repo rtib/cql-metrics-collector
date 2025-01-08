@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
@@ -26,6 +26,8 @@ import io.github.rtib.cmc.model.system_views.DiskUsage;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collector of disk usage of every table.
@@ -33,6 +35,8 @@ import java.util.concurrent.TimeUnit;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class DiskUsageCollector extends AbstractTableCollector {
+    private static final Logger LOG = LoggerFactory.getLogger(DiskUsageCollector.class);
+
     private Metric metric;
 
     public DiskUsageCollector() {
@@ -58,7 +62,7 @@ public class DiskUsageCollector extends AbstractTableCollector {
         }
         
         Duration updateInterval = config.getUpdateInterval();
-        LOG.info("Starting table collector update task: {}", updateInterval);
+        LOG.info("Starting collector update task: {}", updateInterval);
         updateTask = context.queryExecutor.scheduleAtFixedRate(
                 new Thread(() -> update()),
                 0,
@@ -77,7 +81,7 @@ public class DiskUsageCollector extends AbstractTableCollector {
     }
 
     @Override
-    protected Thread getCollector(TableName table) throws MetricException {
+    protected Thread createCollectorTask(TableName table) throws MetricException {
         return new Collector(table);
     }
 
@@ -92,22 +96,10 @@ public class DiskUsageCollector extends AbstractTableCollector {
         }
 
         @Override
-        public void interrupt() {
-            LOG.info("Interrupted collector of {}", table);
-            super.interrupt(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        }
-
-        @Override
         public void run() {
             DiskUsage diskUsageFor = context.systemViewsDao.diskUsageFor(table.keyspace_name(), table.table_name());
             LOG.debug("Metrics acquired: {}", diskUsageFor);
             metric.setValue(labels, diskUsageFor.mebibytes());
-        }
-
-        @Override
-        public void start() {
-            LOG.info("Started collector of {}", table);
-            super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         }
     }
 }

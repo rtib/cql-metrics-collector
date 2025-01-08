@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.metrics.Label;
@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collector of system cache metrics.
@@ -37,6 +39,7 @@ import java.util.concurrent.TimeUnit;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class CachesCollector extends AbstractCollector {
+    private static final Logger LOG = LoggerFactory.getLogger(CachesCollector.class);
     
     private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
     
@@ -94,23 +97,27 @@ public class CachesCollector extends AbstractCollector {
     }
     
     private void update() {
-        LOG.info("Updating.");
+        LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
         List<CacheName> caches = context.systemViewsDao.listCaches().all();
         LOG.debug("Found system caches: {}", caches);
+        
         retainAllCollectors(caches);
-        for (var cache : caches) {
+        int numKept = collectors.size();
+        int numNew = 0;
+        for (CacheName cache : caches) {
             LOG.debug("Checking {}", cache);
             if (collectors.containsKey(cache))
                 continue;
             
-            LOG.debug("Creating collector for {}", cache);
             addCollector(
                     cache,
                     new Collector(cache),
                     config.getMetricsCollectionInterval()
             );
+            numNew++;
         }
-        LOG.info("Engaged {} collector: {}", collectors.size(), collectors.keySet());
+        LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.",
+                this.getClass().getSimpleName(), numKept, numNew, collectors.size());
     }
     
     private class Collector extends Thread {
@@ -144,12 +151,6 @@ public class CachesCollector extends AbstractCollector {
         }
 
         @Override
-        public void interrupt() {
-            LOG.info("Interrupted collector of {}", cacheName);
-            super.interrupt(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        }
-
-        @Override
         public void run() {
             Caches caches = context.systemViewsDao.caches(cacheName.name());
             LOG.debug("Metrics acquired: {}", caches);
@@ -161,12 +162,6 @@ public class CachesCollector extends AbstractCollector {
             metricGauge.setValue(metricLabels.get("recent_request_rate_per_second"), caches.recent_request_rate_per_second());
             metricCounter.setValue(metricLabels.get("request_count"), caches.request_count());
             metricGauge.setValue(metricLabels.get("size_bytes"), caches.size_bytes());
-        }
-
-        @Override
-        public void start() {
-            LOG.info("Started collector of {}", cacheName);
-            super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         }
     }
     

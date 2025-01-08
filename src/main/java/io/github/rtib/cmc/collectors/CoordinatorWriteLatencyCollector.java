@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import io.github.rtib.cmc.model.system_views.Latency;
 
 /**
- * Collect local_read_latency metrics for every table.
+ * Collect coordinator_write_latency metrics for every table.
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
-public final class LocalWriteLatencyCollector extends AbstractLatencyCollector {
-
-    public LocalWriteLatencyCollector() {
-        super("local_write_latency");
-    }
-
-    @Override
-    protected Thread getCollector(TableName table) throws MetricException {
-        return new Collector(table) {
-            @Override
-            protected Latency getLatency() {
-                return context.systemViewsDao.LocalWriteLatency(table.keyspace_name(), table.table_name());
-            }
-        };
+public final class CoordinatorWriteLatencyCollector extends AbstractLatencyCollector {
+    
+    public CoordinatorWriteLatencyCollector() {
+        super("coordinator_write_latency");
     }
     
+    @Override
+    protected Thread createCollectorTask(TableName table) throws MetricException {
+        return new Collector(table) {
+                @Override
+                protected Latency getLatency() {
+                    return context.systemViewsDao.CoordinatorWriteLatency(table.keyspace_name(), table.table_name());
+                }
+            };
+    }
+
 }

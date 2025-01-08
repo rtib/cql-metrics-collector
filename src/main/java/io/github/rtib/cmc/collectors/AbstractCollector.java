@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.Context;
 import io.github.rtib.cmc.model.MetricsIdentifier;
@@ -32,9 +32,10 @@ import org.slf4j.LoggerFactory;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractCollector implements ICollector {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCollector.class);
+
     protected final Context context = Context.getInstance();
     protected final Map<MetricsIdentifier,ScheduledFuture<?>> collectors = new ConcurrentHashMap<>();
-    protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
     protected final String KEYSPACE = "system_views";
     protected final String TABLE;
 
@@ -51,6 +52,7 @@ public abstract class AbstractCollector implements ICollector {
 
     @Override
     public void deactivate() {
+        LOG.info("Shutting down {}", this.getClass().getSimpleName());
         if ((updateTask != null) || !updateTask.isCancelled())
             updateTask.cancel(true);
         clearCollectors();
@@ -82,6 +84,7 @@ public abstract class AbstractCollector implements ICollector {
                         interval.toSeconds(),
                         TimeUnit.SECONDS)
         );
+        LOG.info("Engaged {} task for: {}", this.getClass().getSimpleName(), id);
         return true;
     }
     
@@ -94,6 +97,7 @@ public abstract class AbstractCollector implements ICollector {
         if (task == null)
             return;
         
+        LOG.info("Ceasing {} task for: {}", this.getClass().getSimpleName(), id);
         task.cancel(false);
         collectors.remove(id);
     }

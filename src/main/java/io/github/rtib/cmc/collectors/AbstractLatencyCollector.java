@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract collector of latencies for all tables. To be implemented for any
@@ -35,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractLatencyCollector extends AbstractTableCollector {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractLatencyCollector.class);
 
     protected final String BASENAME = "cassandra_" + TABLE;
     protected Metric metricBuckets;
@@ -49,7 +52,7 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
     @Override
     public void activate() throws CollectorException {
         if (!isAvailable()) {
-            LOG.info("Metrics class not supported.");
+            LOG.info("Metrics class {} not supported.", this.getClass().getSimpleName());
             return;
         }
         try {
@@ -85,8 +88,11 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
             throw new CollectorException("Failed to initialize collector metrics.", ex);
         }
         Duration updateInterval = config.getUpdateInterval();
-        LOG.info("Starting table collector update task: {}", updateInterval);
-        updateTask = context.queryExecutor.scheduleAtFixedRate(new Thread(() -> update()), 0, updateInterval.getSeconds(), TimeUnit.SECONDS);
+        LOG.info("Starting {} update task: {}", this.getClass().getSimpleName(), updateInterval);
+        updateTask = context.queryExecutor.scheduleAtFixedRate(
+                new Thread(() -> update()),
+                0,
+                updateInterval.getSeconds(), TimeUnit.SECONDS);
     }
 
     @Override

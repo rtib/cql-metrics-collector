@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.system_schema.TableName;
@@ -30,7 +30,7 @@ public final class CoordinatorScanLatencyCollector extends AbstractLatencyCollec
     }
 
     @Override
-    protected Thread getCollector(TableName table) throws MetricException {
+    protected Thread createCollectorTask(TableName table) throws MetricException {
         return new Collector(table) {
             @Override
             protected Latency getLatency() {

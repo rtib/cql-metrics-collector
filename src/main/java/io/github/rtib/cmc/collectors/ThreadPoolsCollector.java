@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.rtib.cmc.queryTasks;
+package io.github.rtib.cmc.collectors;
 
 import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.metrics.Label;
@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collector of thread pools metrics.
@@ -37,6 +39,8 @@ import java.util.concurrent.TimeUnit;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public class ThreadPoolsCollector extends AbstractCollector {
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolsCollector.class);
+
     private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
 
     private Metric metricGauge;
@@ -93,22 +97,27 @@ public class ThreadPoolsCollector extends AbstractCollector {
     }
 
     private void update() {
-        LOG.info("Updating.");
+        LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
         List<ThreadPoolName> threadpools = context.systemViewsDao.listThreadPools().all();
         LOG.debug("Found threadpools: {}", threadpools);
+        
         retainAllCollectors(threadpools);
-        for (var tp : threadpools) {
+        int numKept = collectors.size();
+        int numNew = 0;
+        for (ThreadPoolName tp : threadpools) {
             LOG.debug("Checking {}", tp);
             if (collectors.containsKey(tp))
                 continue;
             
-            LOG.debug("Creating Collector for {}", tp);
             addCollector(
                     tp,
                     new Collector(tp),
-                    config.getMetricsCollectionInterval());
+                    config.getMetricsCollectionInterval()
+            );
+            numNew++;
         }
-        LOG.info("Engaged {} collectors: {}", collectors.size(), collectors.keySet());
+        LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.",
+                this.getClass().getSimpleName(), numKept, numNew, collectors.size());
     }
 
     private class Collector extends Thread {

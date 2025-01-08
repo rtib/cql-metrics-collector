@@ -32,9 +32,11 @@ import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MapperSystemVirtualSchema;
 import io.github.rtib.cmc.model.system.SystemInfo;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -162,13 +164,23 @@ public final class Context {
 
     private void cqlConnect() throws ContextException {
         if (cqlSession == null || cqlSession.isClosed()) {
-            URI parsedCP;
+            InetSocketAddress contactPoint;
             try {
-                parsedCP = new URI(null, rootConfig.getString("node"), null, null, null);
-            } catch (URISyntaxException ex) {
-                throw new ContextException("Failed startup, parsing cql-metrics-collector.node configuration value.", ex);
+                contactPoint = new InetSocketAddress(Inet4Address.getLocalHost(), 9042);
+            } catch (UnknownHostException ex) {
+                LOG.error("Failed to get local hostname.", ex);
+                throw new ContextException("Failed to get local hostname.", ex);
             }
-            InetSocketAddress contactPoint = new InetSocketAddress(parsedCP.getHost(), parsedCP.getPort());
+
+            if (rootConfig.hasPath("node")) {
+                URI parsedCP;
+                try {
+                    parsedCP = new URI(null, rootConfig.getString("node"), null, null, null);
+                } catch (URISyntaxException ex) {
+                    throw new ContextException("Failed startup, parsing cql-metrics-collector.node configuration value.", ex);
+                }
+                contactPoint = new InetSocketAddress(parsedCP.getHost(), parsedCP.getPort());                
+            }
 
             cqlSession = CqlSession.builder()
                     .addContactPoint(contactPoint)
