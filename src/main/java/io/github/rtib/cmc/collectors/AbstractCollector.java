@@ -60,7 +60,7 @@ public abstract class AbstractCollector implements ICollector {
         LOG.info("Starting {} update task with interval {}", this.getClass().getSimpleName(), updateInterval);
         updateTask = context.queryExecutor.scheduleAtFixedRate(
                 new Thread(() -> update()),
-                0,
+                ThreadLocalRandom.current().nextLong(config.getUpdateInitialDelay().toSeconds()),
                 updateInterval.getSeconds(), TimeUnit.SECONDS);
     }
 
@@ -183,8 +183,17 @@ public abstract class AbstractCollector implements ICollector {
     }
     
     protected static class CollectorConfig {
-        protected Duration metricsCollectionInterval = Duration.ofSeconds(10);
-        protected Duration updateInterval = Duration.ofMinutes(1);
+        protected Duration metricsCollectionInterval;
+        protected Duration updateInterval;
+        protected Duration updateInitialDelay;
+
+        public Duration getUpdateInitialDelay() {
+            return updateInitialDelay;
+        }
+
+        public void setUpdateInitialDelay(Duration updateInitialDelay) {
+            this.updateInitialDelay = updateInitialDelay;
+        }
 
         public CollectorConfig() {
         }
