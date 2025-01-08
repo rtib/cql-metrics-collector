@@ -55,6 +55,16 @@ public abstract class AbstractCollector implements ICollector {
     }
 
     @Override
+    public void activate() throws CollectorException {
+        Duration updateInterval = config.getUpdateInterval();
+        LOG.info("Starting {} update task with interval {}", this.getClass().getSimpleName(), updateInterval);
+        updateTask = context.queryExecutor.scheduleAtFixedRate(
+                new Thread(() -> update()),
+                0,
+                updateInterval.getSeconds(), TimeUnit.SECONDS);
+    }
+
+    @Override
     public void deactivate() {
         LOG.info("Shutting down {}", this.getClass().getSimpleName());
         if ((updateTask != null) || !updateTask.isCancelled())

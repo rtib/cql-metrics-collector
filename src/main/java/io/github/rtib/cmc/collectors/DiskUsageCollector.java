@@ -24,9 +24,7 @@ import io.github.rtib.cmc.metrics.Repository;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_schema.TableName;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
-import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,13 +59,7 @@ public class DiskUsageCollector extends AbstractTableCollector {
         } catch (MetricException ex) {
             throw new CollectorException("Failed to initialize collector metrics.", ex);
         }
-        
-        Duration updateInterval = config.getUpdateInterval();
-        LOG.info("Starting collector update task: {}", updateInterval);
-        updateTask = context.queryExecutor.scheduleAtFixedRate(
-                new Thread(() -> update()),
-                0,
-                updateInterval.getSeconds(), TimeUnit.SECONDS);
+        super.activate();
     }
     
     @Override

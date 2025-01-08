@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,13 +75,7 @@ public class CachesCollector extends AbstractCollector {
         } catch (MetricException ex) {
             throw new CollectorException("Failed to initalize collector metrics.", ex);
         }
-        
-        Duration updateInterval = config.getUpdateInterval();
-        LOG.atInfo().log("Starting collector update task at rate: {}", updateInterval);
-        updateTask = context.queryExecutor.scheduleAtFixedRate(
-                new Thread(() -> update()),
-                0,
-                updateInterval.getSeconds(), TimeUnit.SECONDS);
+        super.activate();
     }
 
     @Override
