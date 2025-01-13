@@ -35,7 +35,7 @@ public abstract class AbstractTableCollector extends AbstractCollector {
     
     public static final Predicate<TableName> isUserKeyspace = new Predicate<>() {
         private final List<Pattern> USUAL_SUSPECTS = List.of(
-            Pattern.compile("system"),
+            Pattern.compile("^system$"),
             Pattern.compile("^system_.*"),
             Pattern.compile("^dse_.*"),
             Pattern.compile("solr_admin"),
