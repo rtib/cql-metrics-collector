@@ -15,13 +15,13 @@
  */
 package io.github.rtib.cmc.collectors;
 
-import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
-import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
 import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_schema.TableName;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +31,22 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractTableCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTableCollector.class);
-
     protected final TableCollectorConfig config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), TableCollectorConfig.class);
-
+    
+    public static final Predicate<TableName> isUserKeyspace = new Predicate<>() {
+        private final List<Pattern> USUAL_SUSPECTS = List.of(
+            Pattern.compile("system"),
+            Pattern.compile("^system_.*"),
+            Pattern.compile("^dse_.*"),
+            Pattern.compile("solr_admin"),
+            Pattern.compile("OpsCenter")
+        );
+        
+        @Override
+        public boolean test(TableName t) {
+            return USUAL_SUSPECTS.stream().allMatch(p -> !p.matcher(t.keyspace_name()).matches());
+        }
+    };
     /**
      * Initializing a collector for a given source instance.
      * @param source_table 
@@ -42,35 +55,24 @@ public abstract class AbstractTableCollector extends AbstractCollector {
         super(source_table);
     }
 
-    /**
-     * List tables for which metrics might be collected.
-     * @param includeSystemTables whether system tables should be included
-     * @return 
-     */
-    protected List<TableName> listTables(boolean includeSystemTables) {
-        if (includeSystemTables) {
-            return context.systemSchemaDao.listAllTables().all();
-        } else {
-            List<TableName> list = new ArrayList<>();
-            for (KeyspaceMetadata keyspace : context.cqlSession.getMetadata().getKeyspaces().values()) {
-                for (TableMetadata table : keyspace.getTables().values()) {
-                    list.add(new TableName(keyspace.getName().asCql(true), table.getName().asCql(true)));
-                }
-            }
-            return List.copyOf(list);
-        }
-    }
 
     @Override
     protected List<? extends MetricsIdentifier> getInstances() {
-        return listTables(context.getConfigFor(this.getClass()).getBoolean("includeSystemTables"));
+        List<TableName> fulllist = context.systemSchemaDao.listAllTables().all();
+        if (config.isIncludeSystemTables())
+            return fulllist;
+        
+        return fulllist
+                .stream()
+                .filter(AbstractTableCollector.isUserKeyspace)
+                .collect(Collectors.toList());
     }
 
     /**
      * Configuration bean.
      */
     protected static class TableCollectorConfig extends CollectorConfig {
-        private boolean includeSystemTables = false;
+        private boolean includeSystemTables;
 
         public TableCollectorConfig() {
             super();

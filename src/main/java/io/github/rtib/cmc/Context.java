@@ -54,19 +54,13 @@ import org.slf4j.LoggerFactory;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public final class Context {
-    private static final Context instance;
-    private static final Logger LOG;
+    private static final Logger LOG = LoggerFactory.getLogger(Context.class);
+    private static final Context instance = new Context();
 
     private static final String CONFIG_RELOAD_INTERVAL = "config-reload-interval";
     
     private final ScheduledExecutorService adminExecutor;
     private ScheduledFuture<?> configReloadScheduler;
-
-    static {
-        LOG = LoggerFactory.getLogger(Context.class);
-        LOG.info("Creating Context.");
-        instance = new Context();
-    }
 
     /**
      * Get the singleton instance of this class.
@@ -86,6 +80,7 @@ public final class Context {
     public ScheduledExecutorService queryExecutor;
     public final Properties projectProperties;
     public List<Label> commonLabels = Collections.emptyList();
+    private Duration configReloadInterval = Duration.ZERO;
 
     /**
      * Context startup. This is creating the CQL session and setting up the
@@ -93,6 +88,7 @@ public final class Context {
      * @throws ContextException 
      */
     void startup() throws ContextException {
+        loadConfig();
         cqlConnect();
         queryExecutor = new ScheduledThreadPoolExecutor(getConfigFor("queryExecutor").getInt("corePoolSize"));
         
@@ -159,7 +155,6 @@ public final class Context {
             LOG.atError().setCause(ex).log("Failed to load project properties");
         }
         this.adminExecutor = new ScheduledThreadPoolExecutor(1);
-        loadConfig();
     }
 
     private void cqlConnect() throws ContextException {
@@ -215,17 +210,22 @@ public final class Context {
         ConfigFactory.invalidateCaches();
         rootConfig = ConfigFactory.load().getConfig(CONFIG_ROOT_SECTION.getString());
         
-        if (configReloadScheduler != null)
-            configReloadScheduler.cancel(false);
+        if (configReloadInterval != rootConfig.getDuration(CONFIG_RELOAD_INTERVAL)) {
+            configReloadInterval = rootConfig.getDuration(CONFIG_RELOAD_INTERVAL);
 
-        Duration reloadInterval = rootConfig.getDuration(CONFIG_RELOAD_INTERVAL);
-        if (reloadInterval.toSeconds() > 0) {
-            LOG.info("Starting scheduled config reload for intervals of {}", reloadInterval);
-            this.configReloadScheduler = adminExecutor.scheduleWithFixedDelay(
-                new Thread(() -> loadConfig()),
-                reloadInterval.toSeconds(),
-                reloadInterval.toSeconds(),
-                TimeUnit.SECONDS);
+            // Cancel if running
+            if (configReloadScheduler != null)
+                configReloadScheduler.cancel(false);
+
+            // Create if configured
+            if (configReloadInterval.toSeconds() > 0) {
+                LOG.info("Setting up scheduled config reload for {}", configReloadInterval);
+                this.configReloadScheduler = adminExecutor.scheduleWithFixedDelay(
+                    new Thread(() -> loadConfig()),
+                    configReloadInterval.toSeconds(),
+                    configReloadInterval.toSeconds(),
+                    TimeUnit.SECONDS);
+            }
         }
     }
 }

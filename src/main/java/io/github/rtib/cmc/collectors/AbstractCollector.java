@@ -46,7 +46,7 @@ public abstract class AbstractCollector implements ICollector {
     protected ScheduledFuture<?> updateTask;
 
     public AbstractCollector(String source_table) {
-        this.TABLE = source_table;
+        TABLE = source_table;
     }
 
     @Override
@@ -195,9 +195,6 @@ public abstract class AbstractCollector implements ICollector {
             this.updateInitialDelay = updateInitialDelay;
         }
 
-        public CollectorConfig() {
-        }
-
         public Duration getMetricsCollectionInterval() {
             return metricsCollectionInterval;
         }
@@ -213,7 +210,9 @@ public abstract class AbstractCollector implements ICollector {
         public void setUpdateInterval(Duration updateInterval) {
             this.updateInterval = updateInterval;
         }
-        
+
+        public CollectorConfig() {
+        }        
     }
 }
 

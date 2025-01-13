@@ -15,6 +15,7 @@
  */
 package io.github.rtib.cmc.model.system_schema;
 
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 import io.github.rtib.cmc.model.MetricsIdentifier;
@@ -26,6 +27,7 @@ import java.util.Objects;
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 @Entity
+@CqlName("tables")
 @PropertyStrategy(mutable = false)
 public final class TableName implements MetricsIdentifier {
     

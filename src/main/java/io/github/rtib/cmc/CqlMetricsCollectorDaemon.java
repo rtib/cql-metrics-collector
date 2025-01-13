@@ -17,8 +17,6 @@ package io.github.rtib.cmc;
 
 import static io.github.rtib.cmc.PropertyHelper.JAVA_VERSION;
 import static io.github.rtib.cmc.PropertyHelper.JAVA_VM_NAME;
-import io.github.rtib.cmc.exporter.HTTPServer;
-import io.github.rtib.cmc.exporter.HTTPServerException;
 import io.github.rtib.cmc.collectors.CachesCollector;
 import io.github.rtib.cmc.collectors.CollectorException;
 import io.github.rtib.cmc.collectors.CoordinatorReadLatencyCollector;
@@ -29,6 +27,8 @@ import io.github.rtib.cmc.collectors.LocalReadLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalScanLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalWriteLatencyCollector;
 import io.github.rtib.cmc.collectors.ThreadPoolsCollector;
+import io.github.rtib.cmc.exporter.HTTPServer;
+import io.github.rtib.cmc.exporter.HTTPServerException;
 import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +80,6 @@ public class CqlMetricsCollectorDaemon {
     }
 
     private void activate() {
-        logSystemInfo();
         context = Context.getInstance();
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> instance.deactivate()));
@@ -88,6 +87,11 @@ public class CqlMetricsCollectorDaemon {
                 context.projectProperties.getProperty("application-name"),
                 context.projectProperties.getProperty("application-version")
                 );
+        LOG.info("JVM vendor/version: {}/{}",
+                JAVA_VM_NAME.getString(),
+                JAVA_VERSION.getString()
+        );
+        
         try {
             context.startup();
         } catch (ContextException ex) {
@@ -110,11 +114,6 @@ public class CqlMetricsCollectorDaemon {
             httpServer.stop();
     }
 
-    private void logSystemInfo() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("JVM vendor/version: {}/{}", JAVA_VM_NAME.getString(), JAVA_VERSION.getString());
-        }
-    }
     private void logClusterInfo() {
         LOG.info("Connected to Cassandra cluster: {}", context.systemInfo.cluster_name());
         LOG.info("Cassandra version: {}", context.systemInfo.release_version());
