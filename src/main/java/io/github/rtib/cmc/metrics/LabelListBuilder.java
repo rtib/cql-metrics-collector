@@ -87,6 +87,25 @@ public class LabelListBuilder {
         return labels;
     }
     
+    /**
+     * Create a list of labels for a table with a metric component.
+     * @param table
+     * @param metricName
+     * @return 
+     */
+    public static List<Label> valueOf(TableName table, String metricName) {
+        List<Label> labels = null;
+        try {
+            labels = new LabelListBuilder()
+                    .addLabels(LabelListBuilder.valueOf(table))
+                    .addLabel("metric", metricName)
+                    .build();
+        } catch (MetricException ex) {
+            LOG.atError().log("Failed to create List<Label> of table/metric {}/{}.", table, metricName, ex);
+        }
+        return labels;
+    }
+    
     private final List<Label> list = new LinkedList<>();
     
     /**

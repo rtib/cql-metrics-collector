@@ -47,3 +47,6 @@ accessed and exported as listed:
     * `cassandra_<basename>_rate` - exporting the request rate per seconds
   * all metrics are labeled with `keyspace` and `table` referring to the subject of the metrics
   * the buckets are additionally labeled with `quantile`
+* `tombstones_per_read`
+  * `cassandra_tombstones_per_read` - labeled with `keyspace`, `table` and `metric` referring to one of max, p50th and p99th
+  * `cassandra_tombstones_per_read_count` - labeled with `keyspace`, `table` and `metric` referring to reads

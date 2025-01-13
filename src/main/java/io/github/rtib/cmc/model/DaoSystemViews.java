@@ -30,6 +30,7 @@ import io.github.rtib.cmc.model.system_views.LocalScanLatency;
 import io.github.rtib.cmc.model.system_views.LocalWriteLatency;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
+import io.github.rtib.cmc.model.system_views.TombstonesPerRead;
 
 /**
  * Interface of a data access object allowing to access information within system_views.
@@ -38,6 +39,7 @@ import io.github.rtib.cmc.model.system_views.ThreadPools;
  */
 @Dao
 public interface DaoSystemViews {
+    // ToDo: refactor method names to common schema
     
     /**
      * Get an DiskUsage entity to a specific table.
@@ -131,4 +133,13 @@ public interface DaoSystemViews {
      */
     @Select
     LocalScanLatency LocalScanLatency(String keyspace_name, String table_name);
+    
+    /**
+     * Get tombstones per read metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    TombstonesPerRead TombstonesPerRead(String keyspace_name, String table_name);
 }

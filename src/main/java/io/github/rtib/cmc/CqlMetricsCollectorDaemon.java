@@ -27,6 +27,7 @@ import io.github.rtib.cmc.collectors.LocalReadLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalScanLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalWriteLatencyCollector;
 import io.github.rtib.cmc.collectors.ThreadPoolsCollector;
+import io.github.rtib.cmc.collectors.TombstonesPerReadCollector;
 import io.github.rtib.cmc.exporter.HTTPServer;
 import io.github.rtib.cmc.exporter.HTTPServerException;
 import java.util.logging.Level;
@@ -66,6 +67,7 @@ public class CqlMetricsCollectorDaemon {
             new LocalReadLatencyCollector().activate();
             new LocalWriteLatencyCollector().activate();
             new LocalScanLatencyCollector().activate();
+            new TombstonesPerReadCollector().activate();
         } catch (CollectorException ex) {
             LOG.debug("Failed to initialize DiskUsageCollector.", ex);
         }
