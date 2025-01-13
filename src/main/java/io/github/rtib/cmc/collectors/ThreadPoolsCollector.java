@@ -112,7 +112,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
 
         public Collector(MetricsIdentifier id) {
             threadpool = (ThreadPoolName) id;
-            for (var gaugeName : gaugeNames) {
+            for (String gaugeName : gaugeNames) {
                 var labels = LabelListBuilder.valueOf(threadpool, gaugeName);
                 metricLabels.put(gaugeName, labels);
                 metricGauge.addInstance(labels);
@@ -120,12 +120,6 @@ public class ThreadPoolsCollector extends AbstractCollector {
             var labels = LabelListBuilder.valueOf(threadpool, counterName);
             metricLabels.put(counterName, labels);
             metricCounter.addInstance(labels);
-        }
-
-        @Override
-        public void interrupt() {
-            LOG.info("Interrupted collector of {}", threadpool);
-            super.interrupt(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         }
 
         @Override
@@ -138,12 +132,6 @@ public class ThreadPoolsCollector extends AbstractCollector {
             metricGauge.setValue(metricLabels.get("blocked_tasks_all_time"), tpInstance.blocked_tasks_all_time());
             metricGauge.setValue(metricLabels.get("pending_tasks"), tpInstance.pending_tasks());
             metricCounter.setValue(metricLabels.get("completed_tasks"), tpInstance.completed_tasks());
-        }
-
-        @Override
-        public void start() {
-            LOG.info("Started collector of {}", threadpool);
-            super.start(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         }
     }
 
