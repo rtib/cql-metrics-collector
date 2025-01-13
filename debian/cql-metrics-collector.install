@@ -1,2 +1,4 @@
+README.md /usr/share/doc/cql-metrics-collector
 target/appassembler/bin/cql-metrics-collector /usr/share/cql-metrics-collector/bin
 target/appassembler/lib/* /usr/share/cql-metrics-collector/lib
+conf/application.conf /etc/cql-metrics-collector

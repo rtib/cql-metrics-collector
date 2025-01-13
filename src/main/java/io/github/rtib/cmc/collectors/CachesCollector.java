@@ -15,7 +15,6 @@
  */
 package io.github.rtib.cmc.collectors;
 
-import com.typesafe.config.ConfigBeanFactory;
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.Metric;
@@ -40,8 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CachesCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(CachesCollector.class);
-    
-    private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
+    // private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
     
     private Metric metricGauge;
     private Metric metricCounter;

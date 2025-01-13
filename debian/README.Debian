@@ -1,0 +1,8 @@
+CQL-metrics-collector
+=====================
+
+This package is not a part of Debian, (and there are no immediate plans
+to have it added). Bugs should be sent to the projects GitHub page, *not*
+filed in the Debian BTS.
+
+  https://github.com/rtib/cql-metrics-collector/issues

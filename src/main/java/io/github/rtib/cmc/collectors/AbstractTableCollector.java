@@ -22,15 +22,13 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Abstract class collecting metrics on a per instance base.
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractTableCollector extends AbstractCollector {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTableCollector.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(AbstractTableCollector.class);
     protected final TableCollectorConfig config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), TableCollectorConfig.class);
     
     public static final Predicate<TableName> isUserKeyspace = new Predicate<>() {

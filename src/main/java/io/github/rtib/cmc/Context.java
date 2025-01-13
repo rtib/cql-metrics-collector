@@ -160,12 +160,6 @@ public final class Context {
     private void cqlConnect() throws ContextException {
         if (cqlSession == null || cqlSession.isClosed()) {
             InetSocketAddress contactPoint;
-            try {
-                contactPoint = new InetSocketAddress(Inet4Address.getLocalHost(), 9042);
-            } catch (UnknownHostException ex) {
-                LOG.error("Failed to get local hostname.", ex);
-                throw new ContextException("Failed to get local hostname.", ex);
-            }
 
             if (rootConfig.hasPath("node")) {
                 URI parsedCP;
@@ -175,6 +169,13 @@ public final class Context {
                     throw new ContextException("Failed startup, parsing cql-metrics-collector.node configuration value.", ex);
                 }
                 contactPoint = new InetSocketAddress(parsedCP.getHost(), parsedCP.getPort());                
+            } else {
+                try {
+                    contactPoint = new InetSocketAddress(Inet4Address.getLocalHost(), 9042);
+                } catch (UnknownHostException ex) {
+                    LOG.error("Failed to get local hostname.", ex);
+                    throw new ContextException("Failed to get local hostname.", ex);
+                }    
             }
 
             cqlSession = CqlSession.builder()
