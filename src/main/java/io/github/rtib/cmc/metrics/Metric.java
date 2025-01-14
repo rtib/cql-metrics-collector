@@ -161,7 +161,7 @@ public class Metric {
     
     public void writeInstances(OutputStream out) {
         StringBuilder sb;
-        for (var value : values.entrySet()) {
+        for (Map.Entry<List<Label>, MetricValue> value : values.entrySet()) {
             sb = new StringBuilder();
             sb.append(name)
                     .append('{');

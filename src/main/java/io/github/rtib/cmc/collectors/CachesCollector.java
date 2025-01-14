@@ -116,13 +116,13 @@ public class CachesCollector extends AbstractCollector {
         
         public Collector(MetricsIdentifier id) {
             cacheName = (CacheName) id;
-            for (var gaugeName : gaugeNames) {
-                var labels = LabelListBuilder.valueOf(cacheName, gaugeName);
+            for (String gaugeName : gaugeNames) {
+                List<Label> labels = LabelListBuilder.valueOf(cacheName, gaugeName);
                 metricLabels.put(gaugeName, labels);
                 metricGauge.addInstance(labels);
             }
-            for (var counterName : counterNames) {
-                var labels = LabelListBuilder.valueOf(cacheName, counterName);
+            for (String counterName : counterNames) {
+                List<Label> labels = LabelListBuilder.valueOf(cacheName, counterName);
                 metricLabels.put(counterName, labels);
                 metricCounter.addInstance(labels);
             }

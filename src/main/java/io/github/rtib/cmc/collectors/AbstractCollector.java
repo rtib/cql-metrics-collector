@@ -161,12 +161,12 @@ public abstract class AbstractCollector implements ICollector {
      */
     protected void update() {
         LOG.debug("Updating collector tasks of {}", this.getClass().getSimpleName());
-        List<? extends MetricsIdentifier> tableList = getInstances();
-        LOG.debug("Found tables: {}", tableList);
-        retainAllCollectors(tableList);
+        List<? extends MetricsIdentifier> instanceList = getInstances();
+        LOG.debug("Found tables: {}", instanceList);
+        retainAllCollectors(instanceList);
         int numKept = collectors.size();
         int numNew = 0;
-        for (MetricsIdentifier instance : tableList) {
+        for (MetricsIdentifier instance : instanceList) {
             LOG.debug("Checking {}", instance);
             if (collectors.containsKey(instance)) {
                 continue;
