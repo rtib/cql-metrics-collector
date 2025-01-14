@@ -171,12 +171,14 @@ public final class Context {
                 contactPoint = new InetSocketAddress(parsedCP.getHost(), parsedCP.getPort());                
             } else {
                 try {
-                    contactPoint = new InetSocketAddress(Inet4Address.getLocalHost(), 9042);
+                    contactPoint = new InetSocketAddress(Inet4Address.getLocalHost().getCanonicalHostName(), 9042);
                 } catch (UnknownHostException ex) {
                     LOG.error("Failed to get local hostname.", ex);
                     throw new ContextException("Failed to get local hostname.", ex);
                 }    
             }
+            
+            LOG.info("Connecting Cassandra node at {}", contactPoint);
 
             cqlSession = CqlSession.builder()
                     .addContactPoint(contactPoint)
