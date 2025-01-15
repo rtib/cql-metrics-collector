@@ -5,6 +5,7 @@ export DH_OPTIONS
 
 build:
 	mvn package
+	mvn assembly:single
 
 override_dh_clean:
 	dh_clean
