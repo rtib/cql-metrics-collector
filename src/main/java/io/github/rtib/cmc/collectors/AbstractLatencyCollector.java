@@ -118,12 +118,12 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
             labelmap.put("max_ms", tabLabel);
             labelmap.put("p50th_ms", new LabelListBuilder()
                     .addLabels(tabLabel)
-                    .addLabel("quantile", ".5")
+                    .addLabel("quantile", "0.5")
                     .build()
             );
             labelmap.put("p99th_ms", new LabelListBuilder()
                     .addLabels(tabLabel)
-                    .addLabel("quantile", ".99")
+                    .addLabel("quantile", "0.99")
                     .build()
             );
             labelmap.put("per_second", tabLabel);
