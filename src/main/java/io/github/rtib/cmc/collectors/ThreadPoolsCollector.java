@@ -84,11 +84,6 @@ public class ThreadPoolsCollector extends AbstractCollector {
     }
 
     @Override
-    public boolean isAvailable() {
-        return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
-    }
-
-    @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
         return new Collector(id);
     }

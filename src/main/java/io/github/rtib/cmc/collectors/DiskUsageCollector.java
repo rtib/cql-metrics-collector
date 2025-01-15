@@ -67,11 +67,6 @@ public class DiskUsageCollector extends AbstractTableCollector {
         super.deactivate();
         Repository.getInstance().remove(metric);
     }
-    
-    @Override
-    public boolean isAvailable() {
-        return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
-    }
 
     @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {

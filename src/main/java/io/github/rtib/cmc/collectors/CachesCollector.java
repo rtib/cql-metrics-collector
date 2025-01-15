@@ -82,11 +82,6 @@ public class CachesCollector extends AbstractCollector {
         Repository.getInstance().remove(metricGauge);
         Repository.getInstance().remove(metricCounter);
     }
-
-    @Override
-    public boolean isAvailable() {
-        return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
-    }
     
     @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {

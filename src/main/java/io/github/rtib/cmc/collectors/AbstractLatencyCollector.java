@@ -98,11 +98,6 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
         Repository.getInstance().remove(metricRate);
     }
 
-    @Override
-    public boolean isAvailable() {
-        return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
-    }
-
     /**
      * A generic latency collector task.
      */

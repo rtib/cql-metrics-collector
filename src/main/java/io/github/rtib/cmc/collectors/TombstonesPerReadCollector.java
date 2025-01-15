@@ -79,11 +79,6 @@ public class TombstonesPerReadCollector extends AbstractTableCollector {
         Repository.getInstance().remove(metricGauge);
         Repository.getInstance().remove(metricCount);
     }
-    
-    @Override
-    public boolean isAvailable() {
-        return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
-    }
 
     @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {

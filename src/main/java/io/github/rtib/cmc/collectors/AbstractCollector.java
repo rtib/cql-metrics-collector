@@ -74,7 +74,7 @@ public abstract class AbstractCollector implements ICollector {
 
     @Override
     public boolean isAvailable() {
-        return false;
+        return context.systemVirtualSchemaDao.tables(KEYSPACE, TABLE) != null;
     }
     
     /**
