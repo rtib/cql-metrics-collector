@@ -40,7 +40,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  */
 @Entity
 @PropertyStrategy(mutable = false)
-public class TombstonesPerRead {
+public final class TombstonesPerRead {
     
     @PartitionKey(1) private final String keyspace_name;
     @PartitionKey(2) private final String table_name;
