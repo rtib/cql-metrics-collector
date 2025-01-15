@@ -53,3 +53,5 @@ accessed and exported as listed:
 * `batch_metrics`
   * `cassandra_batch_metrics` - labeled with `statement` and `metric="max"`
   * `cassandra_batch_metrics_summary` - labeled with `statement` and `quantile`
+* `max_partition_size`
+  * `cassandra_max_partition_size` - labeled with `keyspace` and `table`

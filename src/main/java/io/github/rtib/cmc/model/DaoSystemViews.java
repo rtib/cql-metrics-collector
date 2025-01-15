@@ -30,6 +30,7 @@ import io.github.rtib.cmc.model.system_views.DiskUsage;
 import io.github.rtib.cmc.model.system_views.LocalReadLatency;
 import io.github.rtib.cmc.model.system_views.LocalScanLatency;
 import io.github.rtib.cmc.model.system_views.LocalWriteLatency;
+import io.github.rtib.cmc.model.system_views.MaxPartitionSize;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
 import io.github.rtib.cmc.model.system_views.TombstonesPerRead;
@@ -159,4 +160,13 @@ public interface DaoSystemViews {
      */
     @Select
     BatchMetrics BatchMetrics(String name);
+    
+    /**
+     * Get the max partition size of the given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    MaxPartitionSize MaxPartitionSize(String keyspace_name, String table_name);
 }
