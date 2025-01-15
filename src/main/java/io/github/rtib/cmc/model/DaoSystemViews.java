@@ -19,6 +19,8 @@ import com.datastax.oss.driver.api.core.PagingIterable;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Query;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
+import io.github.rtib.cmc.model.system_views.BatchMetrics;
+import io.github.rtib.cmc.model.system_views.BatchMetricsName;
 import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.Caches;
 import io.github.rtib.cmc.model.system_views.CoordinatorReadLatency;
@@ -142,4 +144,19 @@ public interface DaoSystemViews {
      */
     @Select
     TombstonesPerRead TombstonesPerRead(String keyspace_name, String table_name);
+    
+    /**
+     * List the names of batch statements.
+     * @return 
+     */
+    @Query("SELECT name FROM system_views.batch_metrics")
+    PagingIterable<BatchMetricsName> listBatchStatements();
+    
+    /**
+     * Get metrics specific to batch a given statement.
+     * @param name
+     * @return 
+     */
+    @Select
+    BatchMetrics BatchMetrics(String name);
 }

@@ -17,6 +17,7 @@ package io.github.rtib.cmc;
 
 import static io.github.rtib.cmc.PropertyHelper.JAVA_VERSION;
 import static io.github.rtib.cmc.PropertyHelper.JAVA_VM_NAME;
+import io.github.rtib.cmc.collectors.BatchMetricsCollector;
 import io.github.rtib.cmc.collectors.CachesCollector;
 import io.github.rtib.cmc.collectors.CollectorException;
 import io.github.rtib.cmc.collectors.CoordinatorReadLatencyCollector;
@@ -68,6 +69,7 @@ public class CqlMetricsCollectorDaemon {
             new LocalWriteLatencyCollector().activate();
             new LocalScanLatencyCollector().activate();
             new TombstonesPerReadCollector().activate();
+            new BatchMetricsCollector().activate();
         } catch (CollectorException ex) {
             LOG.debug("Failed to initialize DiskUsageCollector.", ex);
         }
