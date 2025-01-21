@@ -23,6 +23,7 @@ import io.github.rtib.cmc.collectors.CollectorException;
 import io.github.rtib.cmc.collectors.CoordinatorReadLatencyCollector;
 import io.github.rtib.cmc.collectors.CoordinatorScanLatencyCollector;
 import io.github.rtib.cmc.collectors.CoordinatorWriteLatencyCollector;
+import io.github.rtib.cmc.collectors.CqlMetricsCollector;
 import io.github.rtib.cmc.collectors.DiskUsageCollector;
 import io.github.rtib.cmc.collectors.LocalReadLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalScanLatencyCollector;
@@ -72,6 +73,7 @@ public class CqlMetricsCollectorDaemon {
             new TombstonesPerReadCollector().activate();
             new BatchMetricsCollector().activate();
             new MaxPartitionSizeCollector().activate();
+            new CqlMetricsCollector().activate();
         } catch (CollectorException ex) {
             LOG.debug("Failed to initialize DiskUsageCollector.", ex);
         }

@@ -26,6 +26,8 @@ import io.github.rtib.cmc.model.system_views.Caches;
 import io.github.rtib.cmc.model.system_views.CoordinatorReadLatency;
 import io.github.rtib.cmc.model.system_views.CoordinatorScanLatency;
 import io.github.rtib.cmc.model.system_views.CoordinatorWriteLatency;
+import io.github.rtib.cmc.model.system_views.CqlMetrics;
+import io.github.rtib.cmc.model.system_views.CqlMetricsName;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
 import io.github.rtib.cmc.model.system_views.LocalReadLatency;
 import io.github.rtib.cmc.model.system_views.LocalScanLatency;
@@ -169,4 +171,19 @@ public interface DaoSystemViews {
      */
     @Select
     MaxPartitionSize MaxPartitionSize(String keyspace_name, String table_name);
+    
+    /**
+     * List the names of available CQL metrics.
+     * @return 
+     */
+    @Query("SELECT name FROM system_views.cql_metrics")
+    PagingIterable<CqlMetricsName> listCqlMetrics();
+    
+    /**
+     * Get the CqlMetrics for a name.
+     * @param name
+     * @return 
+     */
+    @Select
+    CqlMetrics CqlMetrics(String name);
 }
