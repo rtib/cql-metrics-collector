@@ -19,9 +19,9 @@ import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
- * Entity class for system_views.tombstones_per_read virtual table.
+ * Entity class for system_views.rows_per_read virtual table.
  * 
- * VIRTUAL TABLE system_views.tombstones_per_read (
+ * VIRTUAL TABLE system_views.rows_per_read (
  *     keyspace_name text,
  *     table_name text,
  *     count bigint,
@@ -39,9 +39,9 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  */
 @Entity
 @PropertyStrategy(mutable = false)
-public final class TombstonesPerRead extends TableSummary {
+public final class RowsPerRead extends TableSummary {
 
-    public TombstonesPerRead(String keyspace_name, String table_name, long count, double max, double p50th, double p99th) {
+    public RowsPerRead(String keyspace_name, String table_name, long count, double max, double p50th, double p99th) {
         super(keyspace_name, table_name, count, max, p50th, p99th);
     }
     

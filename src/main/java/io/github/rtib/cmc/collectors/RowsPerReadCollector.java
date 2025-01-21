@@ -20,14 +20,14 @@ import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.TableSummary;
 
 /**
- * Collector of tombstones per read metrics for every table.
+ * Collector of rows per read metrics for every table.
  * 
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
-public class TombstonesPerReadCollector extends AbstractTableSummaryCollector {
+public class RowsPerReadCollector extends AbstractTableSummaryCollector {
 
-    public TombstonesPerReadCollector() {
-        super("tombstones_per_read");
+    public RowsPerReadCollector() {
+        super("rows_per_read");
     }
     
     @Override
@@ -35,7 +35,7 @@ public class TombstonesPerReadCollector extends AbstractTableSummaryCollector {
         return new Collector(id) {
             @Override
             protected TableSummary getSummary() {
-                return context.systemViewsDao.TombstonesPerRead(table.keyspace_name(), table.table_name());
+                return context.systemViewsDao.RowsPerRead(table.keyspace_name(), table.table_name());
             }
         };
     }

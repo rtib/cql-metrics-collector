@@ -29,6 +29,7 @@ import io.github.rtib.cmc.collectors.LocalReadLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalScanLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalWriteLatencyCollector;
 import io.github.rtib.cmc.collectors.MaxPartitionSizeCollector;
+import io.github.rtib.cmc.collectors.RowsPerReadCollector;
 import io.github.rtib.cmc.collectors.ThreadPoolsCollector;
 import io.github.rtib.cmc.collectors.TombstonesPerReadCollector;
 import io.github.rtib.cmc.exporter.HTTPServer;
@@ -71,6 +72,7 @@ public class CqlMetricsCollectorDaemon {
             new LocalWriteLatencyCollector().activate();
             new LocalScanLatencyCollector().activate();
             new TombstonesPerReadCollector().activate();
+            new RowsPerReadCollector().activate();
             new BatchMetricsCollector().activate();
             new MaxPartitionSizeCollector().activate();
             new CqlMetricsCollector().activate();

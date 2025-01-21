@@ -33,6 +33,7 @@ import io.github.rtib.cmc.model.system_views.LocalReadLatency;
 import io.github.rtib.cmc.model.system_views.LocalScanLatency;
 import io.github.rtib.cmc.model.system_views.LocalWriteLatency;
 import io.github.rtib.cmc.model.system_views.MaxPartitionSize;
+import io.github.rtib.cmc.model.system_views.RowsPerRead;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
 import io.github.rtib.cmc.model.system_views.TombstonesPerRead;
@@ -147,6 +148,15 @@ public interface DaoSystemViews {
      */
     @Select
     TombstonesPerRead TombstonesPerRead(String keyspace_name, String table_name);
+    
+    /**
+     * Get rows per read metrics for a given table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    RowsPerRead RowsPerRead(String keyspace_name, String table_name);
     
     /**
      * List the names of batch statements.
