@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Abstract collector of size metrics about tables.
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractTableSizeCollector extends AbstractTableCollector {
@@ -48,7 +48,12 @@ public abstract class AbstractTableSizeCollector extends AbstractTableCollector 
             return;
         }
         try {
-            metric = new Metric.Builder().withName("cassandra_" + TABLE).withHelp("Disk usage by tables acquired from " + TABLE).withType(MetricType.GAUGE).withCommonLabels(context.commonLabels).build();
+            metric = new Metric.Builder()
+                    .withName("cassandra_" + TABLE)
+                    .withHelp("Disk usage by tables acquired from " + TABLE)
+                    .withType(MetricType.GAUGE)
+                    .withCommonLabels(context.commonLabels)
+                    .build();
             Repository.getInstance().add(metric);
         } catch (MetricException ex) {
             throw new CollectorException("Failed to initialize collector metrics.", ex);

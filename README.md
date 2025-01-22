@@ -31,8 +31,8 @@ The common set of labels contains:
 Currently, only a few metrics are supported. The following virtual tables are
 accessed and exported as listed:
 
-* `disk_usage`
-  * `cassandra_disk_usage` (gauge) - labeled with `keyspace` and `table`
+* `disk_usage`, `max_partition_size`, `max_sstable_size`
+  * `cassandra_<basename>` (gauge) - labeled with `keyspace` and `table`
 * `thread_pools`
   * `cassandra_thread_pools` (gauge) - labeled with `name` of the threadpool and `metric` referring to one of active_tasks, active_tasks_limit, blocked_tasks, blocked_tasks_all_time or pending_tasks
   * `cassandra_completed_tasks_counter` - labeled with `name` as above and `metric` completed_tasks
@@ -53,7 +53,5 @@ accessed and exported as listed:
 * `batch_metrics`
   * `cassandra_batch_metrics` - labeled with `statement` and `metric="max"`
   * `cassandra_batch_metrics_summary` - labeled with `statement` and `quantile`
-* `max_partition_size`
-  * `cassandra_max_partition_size` - labeled with `keyspace` and `table`
 * `cql_metrics`
   * `cassandra_cql_metrics` - labeled with `metric` for the actual metric name

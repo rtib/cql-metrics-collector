@@ -33,6 +33,7 @@ import io.github.rtib.cmc.model.system_views.LocalReadLatency;
 import io.github.rtib.cmc.model.system_views.LocalScanLatency;
 import io.github.rtib.cmc.model.system_views.LocalWriteLatency;
 import io.github.rtib.cmc.model.system_views.MaxPartitionSize;
+import io.github.rtib.cmc.model.system_views.MaxSstableSize;
 import io.github.rtib.cmc.model.system_views.RowsPerRead;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
@@ -196,4 +197,13 @@ public interface DaoSystemViews {
      */
     @Select
     CqlMetrics CqlMetrics(String name);
+    
+    /**
+     * Get max sstable size of a table.
+     * @param keyspace_name
+     * @param table_name
+     * @return 
+     */
+    @Select
+    MaxSstableSize MaxSstableSize(String keyspace_name, String table_name);
 }

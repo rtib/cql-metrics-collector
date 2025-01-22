@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Abstract class collecting metrics on a per instance base.
+ * Abstract class collecting metrics on a per table base.
  * @author Tibor Répási <rtib@users.noreply.github.com>
  */
 public abstract class AbstractTableCollector extends AbstractCollector {

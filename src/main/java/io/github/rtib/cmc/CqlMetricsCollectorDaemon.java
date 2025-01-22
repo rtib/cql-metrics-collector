@@ -29,6 +29,7 @@ import io.github.rtib.cmc.collectors.LocalReadLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalScanLatencyCollector;
 import io.github.rtib.cmc.collectors.LocalWriteLatencyCollector;
 import io.github.rtib.cmc.collectors.MaxPartitionSizeCollector;
+import io.github.rtib.cmc.collectors.MaxSstableSizeCollector;
 import io.github.rtib.cmc.collectors.RowsPerReadCollector;
 import io.github.rtib.cmc.collectors.ThreadPoolsCollector;
 import io.github.rtib.cmc.collectors.TombstonesPerReadCollector;
@@ -61,6 +62,7 @@ public class CqlMetricsCollectorDaemon {
     public static void main(String... args) {
         instance.activate();
         
+        // ToDo: put collector activation into a recurring task of admin executor
         try{
             new DiskUsageCollector().activate();
             new ThreadPoolsCollector().activate();
@@ -76,10 +78,12 @@ public class CqlMetricsCollectorDaemon {
             new BatchMetricsCollector().activate();
             new MaxPartitionSizeCollector().activate();
             new CqlMetricsCollector().activate();
+            new MaxSstableSizeCollector().activate();
         } catch (CollectorException ex) {
             LOG.debug("Failed to initialize DiskUsageCollector.", ex);
         }
         
+        // ToDo: make this a real daemon threadpool
         while(true) {
             try {
                 Thread.sleep(10000);
