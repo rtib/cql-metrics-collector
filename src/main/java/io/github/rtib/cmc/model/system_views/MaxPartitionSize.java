@@ -16,7 +16,6 @@
 package io.github.rtib.cmc.model.system_views;
 
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
-import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
@@ -37,81 +36,9 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  */
 @Entity
 @PropertyStrategy(mutable = false)
-public final class MaxPartitionSize {
-    
-    @PartitionKey(1) private final String keyspace_name;
-    @PartitionKey(2) private final String table_name;
-    private final long mebibytes;
-
-    /**
-     * Get the value of keyspace_name
-     *
-     * @return the value of keyspace_name
-     */
-    public String keyspace_name() {
-        return keyspace_name;
-    }
-
-    /**
-     * Get the value of table_name
-     *
-     * @return the value of table_name
-     */
-    public String table_name() {
-        return table_name;
-    }
-
-    /**
-     * Get the value of mebibytes
-     *
-     * @return the value of mebibytes
-     */
-    public long mebibytes() {
-        return mebibytes;
-    }
+public final class MaxPartitionSize extends TableSize {
 
     public MaxPartitionSize(String keyspace_name, String table_name, long mebibytes) {
-        this.keyspace_name = keyspace_name;
-        this.table_name = table_name;
-        this.mebibytes = mebibytes;
+        super(keyspace_name, table_name, mebibytes);
     }
-
-    @Override
-    public String toString() {
-        return "MaxPartitionSize{" + "keyspace_name=" + keyspace_name + ", table_name=" + table_name + ", mebibytes=" + mebibytes + '}';
-    }
-
-    /**
-     * Get the value of keyspace_name
-     *
-     * @return the value of keyspace_name
-     * @deprecated 
-     */
-    @Deprecated
-    public String getKeyspace_name() {
-        return keyspace_name;
-    }
-
-    /**
-     * Get the value of table_name
-     *
-     * @return the value of table_name
-     * @deprecated 
-     */
-    @Deprecated
-    public String getTable_name() {
-        return table_name;
-    }
-
-    /**
-     * Get the value of mebibytes
-     *
-     * @return the value of mebibytes
-     * @deprecated 
-     */
-    @Deprecated
-    public long getMebibytes() {
-        return mebibytes;
-    }
-
 }
