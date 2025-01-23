@@ -24,7 +24,6 @@ import io.github.rtib.cmc.metrics.Repository;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.Caches;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,27 +137,6 @@ public class CachesCollector extends AbstractCollector {
             metricGauge.setValue(metricLabels.get("recent_request_rate_per_second"), caches.recent_request_rate_per_second());
             metricCounter.setValue(metricLabels.get("request_count"), caches.request_count());
             metricGauge.setValue(metricLabels.get("size_bytes"), caches.size_bytes());
-        }
-    }
-    
-    private static final class Config {
-        private Duration updateInterval = Duration.ofMinutes(1);
-        private Duration metricsCollectionInterval = Duration.ofSeconds(10);
-
-        public void setUpdateInterval(Duration updateInterval) {
-            this.updateInterval = updateInterval;
-        }
-
-        public void setMetricsCollectionInterval(Duration metricsCollectionInterval) {
-            this.metricsCollectionInterval = metricsCollectionInterval;
-        }
-
-        public Duration getUpdateInterval() {
-            return updateInterval;
-        }
-
-        public Duration getMetricsCollectionInterval() {
-            return metricsCollectionInterval;
         }
     }
 }

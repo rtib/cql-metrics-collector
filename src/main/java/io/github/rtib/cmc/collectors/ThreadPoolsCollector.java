@@ -24,7 +24,6 @@ import io.github.rtib.cmc.metrics.Repository;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,26 +131,4 @@ public class ThreadPoolsCollector extends AbstractCollector {
             metricCounter.setValue(metricLabels.get("completed_tasks"), tpInstance.completed_tasks());
         }
     }
-
-    private static final class Config {
-        private Duration updateInterval = Duration.ofMinutes(1);
-        private Duration metricsCollectionInterval = Duration.ofSeconds(10);
-
-        public void setUpdateInterval(Duration updateInterval) {
-            this.updateInterval = updateInterval;
-        }
-
-        public void setMetricsCollectionInterval(Duration metricsCollectionInterval) {
-            this.metricsCollectionInterval = metricsCollectionInterval;
-        }
-
-        public Duration getUpdateInterval() {
-            return updateInterval;
-        }
-
-        public Duration getMetricsCollectionInterval() {
-            return metricsCollectionInterval;
-        }
-    }
-    
 }

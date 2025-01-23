@@ -23,7 +23,6 @@ import io.github.rtib.cmc.metrics.Repository;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.CqlMetrics;
 import io.github.rtib.cmc.model.system_views.CqlMetricsName;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
@@ -104,27 +103,6 @@ public class CqlMetricsCollector extends AbstractCollector {
             CqlMetrics CqlMetrics = context.systemViewsDao.CqlMetrics(metricsName.name());
             LOG.debug("Metrics acquired: {}", CqlMetrics);
             metric.setValue(metricLabels, CqlMetrics.value());
-        }
-    }
-    
-    private static final class Config {
-        private Duration updateInterval = Duration.ofMinutes(1);
-        private Duration metricsCollectionInterval = Duration.ofSeconds(10);
-
-        public void setUpdateInterval(Duration updateInterval) {
-            this.updateInterval = updateInterval;
-        }
-
-        public void setMetricsCollectionInterval(Duration metricsCollectionInterval) {
-            this.metricsCollectionInterval = metricsCollectionInterval;
-        }
-
-        public Duration getUpdateInterval() {
-            return updateInterval;
-        }
-
-        public Duration getMetricsCollectionInterval() {
-            return metricsCollectionInterval;
         }
     }
 }
