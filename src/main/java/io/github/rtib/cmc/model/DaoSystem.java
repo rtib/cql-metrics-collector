@@ -22,7 +22,7 @@ import io.github.rtib.cmc.model.system.SystemInfo;
 /**
  * Interface of a data access object allowing to access information within system.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Dao
 public interface DaoSystem {

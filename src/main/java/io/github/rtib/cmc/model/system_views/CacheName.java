@@ -24,13 +24,14 @@ import java.util.Objects;
 
 /**
  * Entity class to holt query result of
+ * <pre>
  *   SELECT name FROM system_views.caches
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @CqlName("caches")
@@ -41,20 +42,24 @@ public final class CacheName implements MetricsIdentifier {
 
     /**
      * Get cache name.
-     * @return 
+     * @return cache name as string
      */
     public String name() {
         return name;
     }
     
+    /**
+     * Create entity instance.
+     * @param name initial value
+     */
     CacheName(String name) {
         this.name = name;
     } 
 
     /**
      * Get cache name.
-     * @return 
-     * @deprecated 
+     * @return String
+     * @deprecated Use {@link name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getName() {

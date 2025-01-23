@@ -30,13 +30,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Abstract collector of size metrics about tables.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class AbstractTableSizeCollector extends AbstractTableCollector {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTableSizeCollector.class);
-
-    protected Metric metric;
+    private Metric metric;
     
+    /**
+     * Create collector instance.
+     * @param source_table source table name promoted upstream
+     */
     public AbstractTableSizeCollector(String source_table) {
         super(source_table);
     }
@@ -67,12 +70,18 @@ public abstract class AbstractTableSizeCollector extends AbstractTableCollector 
         Repository.getInstance().remove(metric);
     }
 
+    /**
+     * Collector task to collect metrics of a single table.
+     */
     protected abstract class Collector extends Thread {
 
+        /**
+         * Table this collector task is collecting metrics for.
+         */
         protected final TableName table;
         private final List<Label> labels;
 
-        public Collector(MetricsIdentifier id) {
+        Collector(MetricsIdentifier id) {
             super();
             this.table = (TableName) id;
             this.labels = LabelListBuilder.valueOf(this.table);
@@ -86,6 +95,10 @@ public abstract class AbstractTableSizeCollector extends AbstractTableCollector 
             metric.setValue(labels, size.mebibytes());
         }
         
+        /**
+         * Get the table size metrics.
+         * @return entity instance
+         */
         protected abstract TableSize getTableSize();
     }
     

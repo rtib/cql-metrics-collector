@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Handler of root context.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class RootHander implements HttpHandler {
     
@@ -42,6 +42,12 @@ public class RootHander implements HttpHandler {
             + "<li><a href=\"/metrics\">/metrics</a> - Prometheus metrics endpoint</li>"
             + "</body>"
             + "</html>";
+
+    /**
+     * Default constructor.
+     */
+    public RootHander() {
+    }
     
     @Override
     public void handle(HttpExchange exchange) throws IOException {

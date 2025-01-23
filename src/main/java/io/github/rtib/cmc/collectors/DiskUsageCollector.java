@@ -22,10 +22,13 @@ import io.github.rtib.cmc.model.system_views.TableSize;
 /**
  * Collector of disk usage of every table.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class DiskUsageCollector extends AbstractTableSizeCollector {
 
+    /**
+     * Create instance.
+     */
     public DiskUsageCollector() {
         super("disk_usage");
     }

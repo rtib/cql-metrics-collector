@@ -22,19 +22,29 @@ import java.net.InetAddress;
 
 /**
  * Entity class to hold query result of
+ * <pre>
  *   SELECT release_version, cluster_name, data_center, rack, listen_address, listen_port FROM system.local
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @CqlName("local")
 @PropertyStrategy(mutable = false)
 public final class SystemInfo {
 
+    /**
+     * Create the metric entity.
+     * @param release_version initial value
+     * @param cluster_name initial value
+     * @param data_center initial value
+     * @param rack initial value
+     * @param listen_address initial value
+     * @param listen_port initial value
+     */
     public SystemInfo(String release_version, String cluster_name, String data_center, String rack, InetAddress listen_address, int listen_port) {
         this.release_version = release_version;
         this.cluster_name = cluster_name;
@@ -97,7 +107,7 @@ public final class SystemInfo {
      * Get the value of release_version
      *
      * @return the value of release_version
-     * @deprecated
+     * @deprecated Use {@link release_version()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getRelease_version() { return release_version; }
@@ -106,7 +116,7 @@ public final class SystemInfo {
      * Get the value of cluster_name
      *
      * @return the value of cluster_name
-     * @deprecated
+     * @deprecated Use {@link cluster_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getCluster_name() { return cluster_name; }
@@ -115,7 +125,7 @@ public final class SystemInfo {
      * Get the value of data_center
      *
      * @return the value of data_center
-     * @deprecated
+     * @deprecated Use {@link data_center()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getData_center() { return data_center; }
@@ -124,7 +134,7 @@ public final class SystemInfo {
      * Get the value of rack
      *
      * @return the value of rack
-     * @deprecated
+     * @deprecated Use {@link rack()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getRack() { return rack; }
@@ -133,7 +143,7 @@ public final class SystemInfo {
      * Get the value of listen_address
      *
      * @return the value of listen_address
-     * @deprecated
+     * @deprecated Use {@link listen_address()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public InetAddress getListen_address() { return listen_address; }
@@ -142,7 +152,7 @@ public final class SystemInfo {
      * Get the value of listen_port
      *
      * @return the value of listen_port
-     * @deprecated
+     * @deprecated Use {@link listen_port()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public int getListen_port() { return listen_port; }

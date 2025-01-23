@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Build a label list programmatically. 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class LabelListBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(LabelListBuilder.class);
@@ -53,7 +53,7 @@ public class LabelListBuilder {
      * Convert a threadpool and a metric name to a list of label.
      * @param tp ThreadPoolName instance
      * @param metricName metric component name
-     * @return 
+     * @return list of labels
      */
     public static List<Label> valueOf(ThreadPoolName tp, String metricName) {
         List<Label> labels = null;
@@ -72,7 +72,7 @@ public class LabelListBuilder {
      * Convert a cache and metric name to a list of label.
      * @param cache CacheName instance
      * @param metricName metric component name
-     * @return 
+     * @return list of labels
      */
     public static List<Label> valueOf(CacheName cache, String metricName) {
         List<Label> labels = null;
@@ -89,9 +89,9 @@ public class LabelListBuilder {
     
     /**
      * Create a list of labels for a table with a metric component.
-     * @param table
-     * @param metricName
-     * @return 
+     * @param table TableName entity instance
+     * @param metricName name of the metric component
+     * @return list of labels
      */
     public static List<Label> valueOf(TableName table, String metricName) {
         List<Label> labels = null;

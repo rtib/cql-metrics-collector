@@ -18,21 +18,37 @@ package io.github.rtib.cmc.collectors;
 /**
  * Exception thrown by collector tasks.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class CollectorException extends Exception {
 
+    /**
+     * Create the exception instance.
+     */
     public CollectorException() {
     }
 
+    /**
+     * Create the exception instance.
+     * @param message exception message
+     */
     public CollectorException(String message) {
         super(message);
     }
 
+    /**
+     * Create the exception instance.
+     * @param message exception message
+     * @param cause wrapped exception
+     */
     public CollectorException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Create the exception instance.
+     * @param cause wrapped exception
+     */
     public CollectorException(Throwable cause) {
         super(cause);
     }

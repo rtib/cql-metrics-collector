@@ -33,17 +33,20 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract collector of latencies for all tables. To be implemented for any
  * latency metric.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class AbstractLatencyCollector extends AbstractTableCollector {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractLatencyCollector.class);
-
-    protected final String BASENAME = "cassandra_" + TABLE;
-    protected Metric metricBuckets;
-    protected Metric metricCount;
-    protected Metric metricMax;
-    protected Metric metricRate;
+    private final String BASENAME = "cassandra_" + TABLE;
+    private Metric metricBuckets;
+    private Metric metricCount;
+    private Metric metricMax;
+    private Metric metricRate;
     
+    /**
+     * Create collector instance.
+     * @param source_table source table name promoted upstream
+     */
     public AbstractLatencyCollector(String source_table) {
         super(source_table);
     }
@@ -102,10 +105,13 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
      * A generic latency collector task.
      */
     protected abstract class Collector extends Thread {
+        /**
+         * Table this collector task is collecting metrics for.
+         */
         protected final TableName table;
-        protected final Map<String,List<Label>> metricLabels;
+        private final Map<String,List<Label>> metricLabels;
         
-        public Collector(MetricsIdentifier id) throws MetricException {
+        Collector(MetricsIdentifier id) throws MetricException {
             table = (TableName) id;
             List<Label> tabLabel = LabelListBuilder.valueOf(table);
             Map<String,List<Label>> labelmap = new HashMap<>();
@@ -144,7 +150,7 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
 
         /**
          * Get the latency entity for this task.
-         * @return 
+         * @return metrics entity object
          */
         protected abstract Latency getLatency();
     }

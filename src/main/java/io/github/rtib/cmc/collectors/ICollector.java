@@ -17,7 +17,7 @@ package io.github.rtib.cmc.collectors;
 
 /**
  * Collector interface to be implemented by all metrics collector classes.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public interface ICollector {
 

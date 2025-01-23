@@ -22,10 +22,13 @@ import io.github.rtib.cmc.model.system_views.TableSize;
 /**
  * Collector of max sstable size for every table.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class MaxSstableSizeCollector extends AbstractTableSizeCollector {
 
+    /**
+     * Create the collector instance.
+     */
     public MaxSstableSizeCollector() {
         super("max_sstable_size");
     }

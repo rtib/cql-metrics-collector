@@ -26,12 +26,18 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Prometheus metrics endpoint handler.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class MetricsHandler implements HttpHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MetricsHandler.class);
     private final static String contentType = "text/plain; charset=utf-8";
     private final static Repository repo = Repository.getInstance();
+
+    /**
+     * Default constructor.
+     */
+    public MetricsHandler() {
+    }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {

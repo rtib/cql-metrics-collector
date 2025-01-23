@@ -21,7 +21,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
  * Entity class for system_views.caches virtual table.
- * 
+ * <pre>
  * VIRTUAL TABLE system_views.caches (
  *     name text PRIMARY KEY,
  *     capacity_bytes bigint,
@@ -33,12 +33,12 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  *     request_count bigint,
  *     size_bytes bigint
  * ) WITH comment = 'system caches';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @PropertyStrategy(mutable = false)
@@ -56,7 +56,7 @@ public final class Caches {
 
     /**
      * Get cache name.
-     * @return 
+     * @return cache name as string
      */
     public String name() {
         return name;
@@ -64,7 +64,7 @@ public final class Caches {
 
     /**
      * Cache capacity.
-     * @return 
+     * @return capacity in bytes
      */
     public long capacity_bytes() {
         return capacity_bytes;
@@ -72,7 +72,7 @@ public final class Caches {
 
     /**
      * Cache entry count.
-     * @return 
+     * @return number of entries
      */
     public int entry_count() {
         return entry_count;
@@ -80,7 +80,7 @@ public final class Caches {
 
     /**
      * Cache hit count.
-     * @return 
+     * @return hit count
      */
     public long hit_count() {
         return hit_count;
@@ -88,7 +88,7 @@ public final class Caches {
 
     /**
      * Cache hit ratio.
-     * @return 
+     * @return hit ratio
      */
     public double hit_ratio() {
         return hit_ratio;
@@ -96,7 +96,7 @@ public final class Caches {
 
     /**
      * Recent cache hit rate.
-     * @return 
+     * @return hit rate per second
      */
     public long recent_hit_rate_per_second() {
         return recent_hit_rate_per_second;
@@ -104,7 +104,7 @@ public final class Caches {
 
     /**
      * Recent request rate.
-     * @return 
+     * @return request rate per second
      */
     public long recent_request_rate_per_second() {
         return recent_request_rate_per_second;
@@ -112,7 +112,7 @@ public final class Caches {
 
     /**
      * Request count.
-     * @return 
+     * @return number of requests
      */
     public long request_count() {
         return request_count;
@@ -120,12 +120,24 @@ public final class Caches {
 
     /**
      * Cache size.
-     * @return 
+     * @return cache size in bytes
      */
     public long size_bytes() {
         return size_bytes;
     }
     
+    /**
+     * Create entity instance.
+     * @param name initial value
+     * @param capacity_bytes initial value
+     * @param entry_count initial value
+     * @param hit_count initial value
+     * @param hit_ratio initial value
+     * @param recent_hit_rate_per_second initial value
+     * @param recent_request_rate_per_second initial value
+     * @param request_count initial value
+     * @param size_bytes initial value
+     */
     Caches(
             String name,
             long capacity_bytes,
@@ -150,8 +162,8 @@ public final class Caches {
 
     /**
      * Get cache name.
-     * @return 
-     * @deprecated 
+     * @return String
+     * @deprecated Use {@link name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getName() {
@@ -160,8 +172,8 @@ public final class Caches {
 
     /**
      * Cache capacity.
-     * @return 
-     * @deprecated 
+     * @return long
+     * @deprecated Use {@link capacity_bytes()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getCapacity_bytes() {
@@ -170,8 +182,8 @@ public final class Caches {
 
     /**
      * Cache entry count.
-     * @return 
-     * @deprecated 
+     * @return int
+     * @deprecated Use {@link entry_count()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public int getEntry_count() {
@@ -180,8 +192,8 @@ public final class Caches {
 
     /**
      * Cache hit count.
-     * @return 
-     * @deprecated 
+     * @return long
+     * @deprecated Use {@link hit_count()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getHit_count() {
@@ -190,8 +202,8 @@ public final class Caches {
 
     /**
      * Cache hit ratio.
-     * @return 
-     * @deprecated 
+     * @return double
+     * @deprecated Use {@link hit_ratio()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getHit_ratio() {
@@ -200,8 +212,8 @@ public final class Caches {
 
     /**
      * Recent cache hit rate.
-     * @return 
-     * @deprecated 
+     * @return long
+     * @deprecated Use {@link recent_hit_rate_per_second()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getRecent_hit_rate_per_second() {
@@ -210,8 +222,8 @@ public final class Caches {
 
     /**
      * Recent request rate.
-     * @return 
-     * @deprecated 
+     * @return long
+     * @deprecated Use {@link recent_request_rate_per_second()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getRecent_request_rate_per_second() {
@@ -220,8 +232,8 @@ public final class Caches {
 
     /**
      * Request count.
-     * @return 
-     * @deprecated 
+     * @return long
+     * @deprecated Use {@link request_count()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getRequest_count() {
@@ -230,8 +242,8 @@ public final class Caches {
 
     /**
      * Cache size.
-     * @return 
-     * @deprecated 
+     * @return long
+     * @deprecated Use {@link size_bytes()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getSize_bytes() {

@@ -21,17 +21,17 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
  * Entity class for system_views.cql_metrics virtual table.
- * 
+ * <pre>
  * VIRTUAL TABLE system_views.cql_metrics (
  *     name text PRIMARY KEY,
  *     value double
  * ) WITH comment = 'Metrics specific to CQL prepared statement caching';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @PropertyStrategy(mutable = false)
@@ -57,6 +57,11 @@ public class CqlMetrics {
         return value;
     }
 
+    /**
+     * Create entity instance.
+     * @param name initial value
+     * @param value initial value
+     */
     public CqlMetrics(String name, double value) {
         this.name = name;
         this.value = value;
@@ -71,7 +76,7 @@ public class CqlMetrics {
      * Get the value of name
      *
      * @return the value of name
-     * @deprecated 
+     * @deprecated Use {@link name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getName() {
@@ -82,7 +87,7 @@ public class CqlMetrics {
      * Get the value
      *
      * @return the value
-     * @deprecated 
+     * @deprecated Use {@link value()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getValue() {

@@ -19,19 +19,19 @@ import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 
 /**
  * Entity class for table bound disk size metrics, e.g.
- * 
+ * <pre>
  * VIRTUAL TABLE system_views.disk_usage (
  *   keyspace_name text,
  *   table_name text,
  *   mebibytes bigint,
  * PRIMARY KEY ((keyspace_name, table_name))
  * ) WITH comment = '';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class TableSize {
     
@@ -57,6 +57,12 @@ public abstract class TableSize {
      */
     public long mebibytes() { return mebibytes; }
     
+    /**
+     * Create entity instance.
+     * @param keyspace_name initial value
+     * @param table_name initial value
+     * @param mebibytes initial value
+     */
     public TableSize(String keyspace_name, String table_name, long mebibytes) {
         this.keyspace_name = keyspace_name;
         this.table_name = table_name;
@@ -71,7 +77,7 @@ public abstract class TableSize {
     /**
      * Get mebibytes.
      * @return long
-     * @deprecated
+     * @deprecated Use {@link mebibytes()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getMebibytes() { return mebibytes; }
@@ -79,7 +85,7 @@ public abstract class TableSize {
     /**
      * Get table_name.
      * @return String
-     * @deprecated
+     * @deprecated Use {@link table_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getTable_name() { return table_name; }
@@ -87,7 +93,7 @@ public abstract class TableSize {
     /**
      * Get keyspace_name.
      * @return String
-     * @deprecated
+     * @deprecated Use {@link keyspace_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getKeyspace_name() { return keyspace_name; }

@@ -24,14 +24,14 @@ import java.util.Objects;
 
 /**
  * Entity class for CQL query:
- * 
+ * <pre>
  * SELECT name FROM system_views.cql_metrics;
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @CqlName("cql_metrics")
@@ -48,6 +48,10 @@ public class CqlMetricsName implements MetricsIdentifier {
         return name;
     }
 
+    /**
+     * Create entity instance.
+     * @param name initial value
+     */
     public CqlMetricsName(String name) {
         this.name = name;
     }

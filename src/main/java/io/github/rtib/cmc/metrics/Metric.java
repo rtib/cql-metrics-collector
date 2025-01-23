@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A metric.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class Metric {
 
@@ -115,6 +115,10 @@ public class Metric {
                 .toString();
     }
     
+    /**
+     * Write the help string to an output.
+     * @param out stream to write to
+     */
     public void writeHelp(OutputStream out) {
         try {
             out.write(getHelp().getBytes(encoding));
@@ -139,6 +143,10 @@ public class Metric {
                 .toString();
     }
     
+    /**
+     * Write the type string to an output.
+     * @param out stream to write to
+     */
     public void writeType(OutputStream out) {
         try {
             out.write(getType().getBytes(encoding));
@@ -159,6 +167,10 @@ public class Metric {
         return out.toString();
     }
     
+    /**
+     * Write the instance lines to a given output stream.
+     * @param out output to write to
+     */
     public void writeInstances(OutputStream out) {
         StringBuilder sb;
         for (Map.Entry<List<Label>, MetricValue> value : values.entrySet()) {
@@ -185,6 +197,10 @@ public class Metric {
         }
     }
 
+    /**
+     * Write the whole content of this metric.
+     * @param out stream to write to
+     */
     public void write(OutputStream out) {
         writeHelp(out);
         writeType(out);
@@ -198,6 +214,10 @@ public class Metric {
         return out.toString();
     }
 
+    /**
+     * Get the name.
+     * @return metric name
+     */
     public String getName() {
         return this.name;
     }

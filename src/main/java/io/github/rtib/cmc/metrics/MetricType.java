@@ -17,17 +17,41 @@ package io.github.rtib.cmc.metrics;
 
 /**
  * Metric types to be exported.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public enum MetricType {
+    /**
+     * Counter type
+     */
     COUNTER ("counter"),
+    
+    /**
+     * Gauge type
+     */
     GAUGE ("gauge"),
+    
+    /**
+     * Histogram type
+     */
     HISTOGRAM ("histogram"),
+    
+    /**
+     * Summary type
+     */
     SUMMARY ("summary"),
+    
+    /**
+     * No type specified
+     */
     UNTYPED ("untyped")
     ;
+    
     private String name;
     
+    /**
+     * Initialize the enum instance
+     * @param key instance key
+     */
     MetricType(String key) {
         this.name = key;
     }

@@ -18,7 +18,7 @@ package io.github.rtib.cmc.metrics;
 /**
  * A metric value.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 class MetricValue {
 

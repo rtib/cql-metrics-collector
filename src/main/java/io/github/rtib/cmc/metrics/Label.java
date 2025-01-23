@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 /**
  * Metric label.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class Label {
 
@@ -39,7 +39,7 @@ public final class Label {
      * @param name label name
      * @param value label value
      * @throws MetricException if the label name is not valid
-     * @see https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels
+     * @see <a href="https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels">Prometheus metric names and labels</a>
      */
     public Label(String name, String value) throws MetricException {
         if (!ALLOWED_NAME.matcher(name).matches())

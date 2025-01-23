@@ -20,15 +20,32 @@ import java.time.Duration;
 /**
  * Access relevant properties.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public enum PropertyHelper {
+    /**
+     * Java virtual machine distribution name.
+     */
     JAVA_VM_NAME ("java.vm.name"),
+    
+    /**
+     * Java version
+     */
     JAVA_VERSION ("java.version"),
     
+    /**
+     * Max time a HTTP request transmission may take
+     */
     HTTP_MAX_REQ_TIME ("sun.net.httpserver.maxReqTime"),
+    
+    /**
+     * Max time a HTTP response transmission may take
+     */
     HTTP_MAX_RSP_TIME ("sun.net.httpserver.maxRspTime"),
     
+    /**
+     * Name of the configuration root section
+     */
     CONFIG_ROOT_SECTION ("io.github.rtib.cmc.Context.config_root_section", "cql-metrics-collector"),
     ;
     
@@ -45,28 +62,57 @@ public enum PropertyHelper {
         this.defaultVal = defaultVal;
     }
     
+    /**
+     * Get the property key
+     * @return property key string
+     */
     public String getKey() {
         return key;
     }
     
+    /**
+     * Get the property value as String
+     * @return property value converted as String
+     */
     public String getString() {
         String value = System.getProperty(key);
         return (value == null) ? defaultVal : STRING_CONVERTER.convert(value);
     }
     
+    /**
+     * Set the property String value.
+     * @param value new String value to set
+     */
     public void setString(final String value) {
         System.setProperty(key, value);
     }
     
+    /**
+     * Set the property value as numeric.
+     * @param amount numeric value to set
+     */
     public void set(final long amount) {
         setString(String.valueOf(amount));
     }
     
+    /**
+     * Set the property value from Duration as seconds.
+     * @param duration Duration to set
+     */
     public void setSeconds(final Duration duration) {
         set(duration.getSeconds());
     }
     
+    /**
+     * Property converter FI
+     * @param <T> type to convert to
+     */
     public interface PropertyConverter<T> {
+        /**
+         * Type conversion
+         * @param value property value to convert
+         * @return the value converted to type T
+         */
         T convert(String value);
     }
     

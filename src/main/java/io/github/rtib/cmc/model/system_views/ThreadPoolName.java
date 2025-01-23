@@ -23,13 +23,14 @@ import java.util.Objects;
 
 /**
  * Entity class to holt query result of
+ * <pre>
  *   SELECT name FROM system_views.thread_pools
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @CqlName("thread_pools")
@@ -38,6 +39,10 @@ public final class ThreadPoolName implements MetricsIdentifier {
 
     private final String name;
     
+    /**
+     * Create entity instance.
+     * @param name initial value
+     */
     ThreadPoolName(String name) {
         this.name = name;
     }
@@ -49,7 +54,7 @@ public final class ThreadPoolName implements MetricsIdentifier {
 
     /**
      * Get the name of the thread pool.
-     * @return 
+     * @return the name string
      */
     public String name() {
         return name;
@@ -57,8 +62,8 @@ public final class ThreadPoolName implements MetricsIdentifier {
 
     /**
      * Get the name of the thread pool.
-     * @return 
-     * @deprecated 
+     * @return String
+     * @deprecated Use {@link name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getName() {

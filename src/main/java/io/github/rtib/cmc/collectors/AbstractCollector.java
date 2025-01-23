@@ -32,19 +32,45 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Abstract class implementing common functions of collectors.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class AbstractCollector implements ICollector {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCollector.class);
 
+    /**
+     * Application context reference.
+     */
     protected final Context context = Context.getInstance();
+    
+    /**
+     * Generic collector configuration bean instance.
+     */
     protected final CollectorConfig config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), CollectorConfig.class);
+    
+    /**
+     * Map of metric identifiers (things collecting metrics about) mapping the collector tasks.
+     */
     protected final Map<MetricsIdentifier,ScheduledFuture<?>> collectors = new ConcurrentHashMap<>();
+    
+    /**
+     * Keyspace of the source table's keyspace.
+     */
     protected final String KEYSPACE = "system_views";
+    
+    /**
+     * Source table.
+     */
     protected final String TABLE;
 
+    /**
+     * Scheduled task for updating collector task instances.
+     */
     protected ScheduledFuture<?> updateTask;
 
+    /**
+     * Create the collector instance.
+     * @param source_table source table name
+     */
     public AbstractCollector(String source_table) {
         TABLE = source_table;
     }
@@ -143,13 +169,13 @@ public abstract class AbstractCollector implements ICollector {
      * a given instance.
      * @param id identifier which metrics are to be collected.
      * @return the collector thread.
-     * @throws MetricException
+     * @throws MetricException wrapping exceptions from creating labels
      */
     protected abstract Thread createCollectorTask(MetricsIdentifier id) throws MetricException;
 
     /**
      * Get the list of instances to be collected by this collector.
-     * @return
+     * @return List of instance identifiers.
      */
     protected abstract List<? extends MetricsIdentifier> getInstances();
 
@@ -182,35 +208,65 @@ public abstract class AbstractCollector implements ICollector {
         LOG.info("{} tasks updated: {} kept, {} created, {} overall engaged.", this.getClass().getSimpleName(), numKept, numNew, collectors.size());
     }
     
+    /**
+     * Configuration bean for all kinds of collectors.
+     */
     protected static class CollectorConfig {
-        protected Duration metricsCollectionInterval;
-        protected Duration updateInterval;
-        protected Duration updateInitialDelay;
+        private Duration metricsCollectionInterval;
+        private Duration updateInterval;
+        private Duration updateInitialDelay;
 
+        /**
+         * Get the initial delay of starting the update task.
+         * @return initial delay
+         */
         public Duration getUpdateInitialDelay() {
             return updateInitialDelay;
         }
 
+        /**
+         * Set the initial delay of starting the update task.
+         * @param updateInitialDelay Duration of the initial delay
+         */
         public void setUpdateInitialDelay(Duration updateInitialDelay) {
             this.updateInitialDelay = updateInitialDelay;
         }
 
+        /**
+         * Get the interval of collecting metric values.
+         * @return Duration of the interval
+         */
         public Duration getMetricsCollectionInterval() {
             return metricsCollectionInterval;
         }
 
+        /**
+         * Get the interval of updating metric instances.
+         * @return Duration of the update interval
+         */
         public Duration getUpdateInterval() {
             return updateInterval;
         }
 
+        /**
+         * Set the interval of collecting metric values.
+         * @param metricsCollectionInterval new Duration of collection interval
+         */
         public void setMetricsCollectionInterval(Duration metricsCollectionInterval) {
             this.metricsCollectionInterval = metricsCollectionInterval;
         }
 
+        /**
+         * Set the interval of updating metric instances.
+         * @param updateInterval new Duration of update interval
+         */
         public void setUpdateInterval(Duration updateInterval) {
             this.updateInterval = updateInterval;
         }
 
+        /**
+         * Default constructor.
+         */
         public CollectorConfig() {
         }        
     }

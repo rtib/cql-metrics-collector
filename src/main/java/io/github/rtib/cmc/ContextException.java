@@ -18,17 +18,29 @@ package io.github.rtib.cmc;
 /**
  * Exception to be thrown from Context class.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class ContextException extends Exception {
 
+    /**
+     * Create the instance.
+     */
     public ContextException() {
     }
 
+    /**
+     * Create the instance.
+     * @param message exception message
+     */
     public ContextException(String message) {
         super(message);
     }
 
+    /**
+     * Create the instance.
+     * @param message exception message
+     * @param cause wrapped exception
+     */
     public ContextException(String message, Throwable cause) {
         super(message, cause);
     }

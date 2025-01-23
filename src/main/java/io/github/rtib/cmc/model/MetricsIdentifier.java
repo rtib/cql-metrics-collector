@@ -19,7 +19,7 @@ package io.github.rtib.cmc.model;
  * Interface to be implemented by Entity classes allowed to be used as
  * identifier of a Metric.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public interface MetricsIdentifier {
     

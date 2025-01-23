@@ -32,16 +32,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * Abstract collector of table access summary metrics.
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class AbstractTableSummaryCollector extends AbstractTableCollector {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTableSummaryCollector.class);
 
-    protected final String BASENAME = "cassandra_" + TABLE;
-    protected Metric metricCount;
-    protected Metric metricGauge;
+    private final String BASENAME = "cassandra_" + TABLE;
+    private Metric metricCount;
+    private Metric metricGauge;
 
+    /**
+     * Create collector instance.
+     * @param source_table source table name promoted upstream
+     */
     public AbstractTableSummaryCollector(String source_table) {
         super(source_table);
     }
@@ -80,8 +84,15 @@ public abstract class AbstractTableSummaryCollector extends AbstractTableCollect
         Repository.getInstance().remove(metricCount);
     }
     
+    /**
+     * Collector tasks for collecting the metrics of a single table.
+     */
     protected abstract class Collector extends Thread {
+        /**
+         * Table this collector task is collecting metrics for.
+         */
         protected final TableName table;
+        
         private final Map<String,List<Label>> metricLabels = new HashMap<>();
         private final String counterName = "reads";
         private final Set<String> gaugeNames = Set.of(
@@ -90,7 +101,7 @@ public abstract class AbstractTableSummaryCollector extends AbstractTableCollect
                 "p99th"
         );
 
-        public Collector(MetricsIdentifier id) {
+        Collector(MetricsIdentifier id) {
             this.table = (TableName) id;
             for (String gaugeName : gaugeNames) {
                 List<Label> labels = LabelListBuilder.valueOf(table, gaugeName);
@@ -114,7 +125,7 @@ public abstract class AbstractTableSummaryCollector extends AbstractTableCollect
 
         /**
          * Get the summary entity for this task.
-         * @return 
+         * @return metrics entity object
          */
         protected abstract TableSummary getSummary();
     }

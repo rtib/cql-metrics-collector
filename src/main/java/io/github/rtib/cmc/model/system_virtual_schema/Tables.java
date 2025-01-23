@@ -22,7 +22,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
  * Entity class for system_virtual_schema.tables virtual table.
- * 
+ * <pre>
  * VIRTUAL TABLE system_virtual_schema.tables (
  *  keyspace_name text,
  *  table_name text,
@@ -30,17 +30,23 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  *  PRIMARY KEY (keyspace_name, table_name)
  *  ) WITH CLUSTERING ORDER BY (table_name ASC)
  *  AND comment = 'virtual table definitions';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @PropertyStrategy(mutable = false)
 public final class Tables {
 
+    /**
+     * Create entity instance.
+     * @param keyspace_name initial value
+     * @param table_name initial value
+     * @param comment initial value
+     */
     public Tables(String keyspace_name, String table_name, String comment) {
         this.keyspace_name = keyspace_name;
         this.table_name = table_name;
@@ -76,7 +82,7 @@ public final class Tables {
      * Get the value of keyspace_name
      *
      * @return the value of keyspace_name
-     * @deprecated
+     * @deprecated Use {@link keyspace_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getKeyspace_name() { return keyspace_name; }
@@ -85,7 +91,7 @@ public final class Tables {
      * Get the value of table_name
      *
      * @return the value of table_name
-     * @deprecated
+     * @deprecated Use {@link table_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getTable_name() { return table_name;}
@@ -94,7 +100,7 @@ public final class Tables {
      * Get the value of comment
      *
      * @return the value of comment
-     * @deprecated
+     * @deprecated Use {@link comment()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getComment() { return comment; }

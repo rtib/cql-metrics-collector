@@ -23,9 +23,15 @@ import io.github.rtib.cmc.model.MetricsIdentifier;
 import java.util.Objects;
 
 /**
- * Identifier entity of batch statements.
+ * Entity class to holt query result of
+ * <pre>
+ *   SELECT name FROM system_views.batch_metrics
+ * </pre>
+ * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
+ * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
+ * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @CqlName("caches")
@@ -34,13 +40,17 @@ public final class BatchMetricsName implements MetricsIdentifier {
     
     @PartitionKey private final String name;
 
+    /**
+     * Create entity instance.
+     * @param name batch name as string
+     */
     public BatchMetricsName(String name) {
         this.name = name;
     }
 
     /**
      * Get the name of the batch statement.
-     * @return 
+     * @return batch statement name as string
      */
     public String name() {
         return name;
@@ -75,8 +85,8 @@ public final class BatchMetricsName implements MetricsIdentifier {
     
     /**
      * Get the name of the batch statement.
-     * @return 
-     * @deprecated 
+     * @return String
+     * @deprecated Use {@link name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getName() {

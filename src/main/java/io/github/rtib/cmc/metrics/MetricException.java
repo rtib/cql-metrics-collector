@@ -16,22 +16,38 @@
 package io.github.rtib.cmc.metrics;
 
 /**
- *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * Exception to be thrown from metrics package.
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class MetricException extends Exception {
 
+    /**
+     * Create the instance.
+     */
     public MetricException() {
     }
 
+    /**
+     * Create the instance.
+     * @param message exception message
+     */
     public MetricException(String message) {
         super(message);
     }
 
+    /**
+     * Create the instance.
+     * @param message exception message
+     * @param cause wrapped exception
+     */
     public MetricException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Create the instance.
+     * @param cause wrapped exception
+     */
     public MetricException(Throwable cause) {
         super(cause);
     }

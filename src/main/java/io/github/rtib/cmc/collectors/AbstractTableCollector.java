@@ -25,13 +25,17 @@ import java.util.stream.Collectors;
 
 /**
  * Abstract class collecting metrics on a per table base.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class AbstractTableCollector extends AbstractCollector {
     // private static final Logger LOG = LoggerFactory.getLogger(AbstractTableCollector.class);
+    
+    /**
+     * Configuration bean generic to all subordinate collectors.
+     */
     protected final TableCollectorConfig config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), TableCollectorConfig.class);
     
-    public static final Predicate<TableName> isUserKeyspace = new Predicate<>() {
+    private static final Predicate<TableName> isUserKeyspace = new Predicate<>() {
         private final List<Pattern> USUAL_SUSPECTS = List.of(
             Pattern.compile("^system$"),
             Pattern.compile("^system_.*"),
@@ -45,14 +49,14 @@ public abstract class AbstractTableCollector extends AbstractCollector {
             return USUAL_SUSPECTS.stream().allMatch(p -> !p.matcher(t.keyspace_name()).matches());
         }
     };
+    
     /**
      * Initializing a collector for a given source instance.
-     * @param source_table 
+     * @param source_table source table name promoted upstream
      */
     public AbstractTableCollector(String source_table) {
         super(source_table);
     }
-
 
     @Override
     protected List<? extends MetricsIdentifier> getInstances() {
@@ -72,14 +76,25 @@ public abstract class AbstractTableCollector extends AbstractCollector {
     protected static class TableCollectorConfig extends CollectorConfig {
         private boolean includeSystemTables;
 
+        /**
+         * Create the configuration bean instance.
+         */
         public TableCollectorConfig() {
             super();
         }
 
+        /**
+         * Get whether or not metrics on system tables should be included.
+         * @return true if system tables should be included
+         */
         public boolean isIncludeSystemTables() {
             return includeSystemTables;
         }
 
+        /**
+         * Set whether or not metrics on system tables should be included.
+         * @param includeSystemTables true to include system tables
+         */
         public void setIncludeSystemTables(boolean includeSystemTables) {
             this.includeSystemTables = includeSystemTables;
         }

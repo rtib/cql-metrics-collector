@@ -22,10 +22,13 @@ import io.github.rtib.cmc.model.system_views.TableSummary;
 /**
  * Collector of tombstones per read metrics for every table.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class TombstonesPerReadCollector extends AbstractTableSummaryCollector {
 
+    /**
+     * Create collector instance.
+     */
     public TombstonesPerReadCollector() {
         super("tombstones_per_read");
     }

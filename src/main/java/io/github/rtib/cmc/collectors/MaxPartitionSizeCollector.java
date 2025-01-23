@@ -22,10 +22,13 @@ import io.github.rtib.cmc.model.system_views.TableSize;
 /**
  * Collector of max partition size for every table.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class MaxPartitionSizeCollector extends AbstractTableSizeCollector {
 
+    /**
+     * Create collector instance.
+     */
     public MaxPartitionSizeCollector() {
         super("max_partition_size");
     }

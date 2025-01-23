@@ -19,7 +19,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 
 /**
  * Abstract entity class for table based summaries, e.g.
- * 
+ * <pre>
  * VIRTUAL TABLE system_views.tombstones_per_read (
  *     keyspace_name text,
  *     table_name text,
@@ -29,22 +29,31 @@ import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
  *     p99th double,
  *     PRIMARY KEY ((keyspace_name, table_name))
  * ) WITH comment = '';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class TableSummary {
     
-    @PartitionKey(1) protected final String keyspace_name;
-    @PartitionKey(2) protected final String table_name;
-    protected final long count;
-    protected final double max;
-    protected final double p50th;
-    protected final double p99th;
+    @PartitionKey(1) private final String keyspace_name;
+    @PartitionKey(2) private final String table_name;
+    private final long count;
+    private final double max;
+    private final double p50th;
+    private final double p99th;
 
+    /**
+     * Create entity instance
+     * @param keyspace_name initial value
+     * @param table_name initial value
+     * @param count initial value
+     * @param max initial value
+     * @param p50th initial value
+     * @param p99th initial value
+     */
     public TableSummary(String keyspace_name, String table_name, long count, double max, double p50th, double p99th) {
         this.keyspace_name = keyspace_name;
         this.table_name = table_name;
@@ -117,7 +126,7 @@ public abstract class TableSummary {
      * Get the value of keyspace_name
      *
      * @return the value of keyspace_name
-     * @deprecated
+     * @deprecated Use {@link keyspace_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getKeyspace_name() {
@@ -128,7 +137,7 @@ public abstract class TableSummary {
      * Get the value of table_name
      *
      * @return the value of table_name
-     * @deprecated
+     * @deprecated Use {@link table_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getTable_name() {
@@ -139,7 +148,7 @@ public abstract class TableSummary {
      * Get the value of count
      *
      * @return the value of count
-     * @deprecated
+     * @deprecated Use {@link count()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getCount() {
@@ -150,7 +159,7 @@ public abstract class TableSummary {
      * Get the value of max
      *
      * @return the value of max
-     * @deprecated
+     * @deprecated Use {@link max()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getMax() {
@@ -161,7 +170,7 @@ public abstract class TableSummary {
      * Get the value of p50th
      *
      * @return the value of p50th
-     * @deprecated
+     * @deprecated Use {@link p50th()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP50th() {
@@ -172,7 +181,7 @@ public abstract class TableSummary {
      * Get the value of p99th
      *
      * @return the value of p99th
-     * @deprecated
+     * @deprecated Use {@link p99th()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP99th() {

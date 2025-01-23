@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * its elements are changed. Each Metric can only be listed once, while metrics
  * are distinguished by their name. A single Metric may carry multiple values.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class Repository {
     
@@ -85,7 +85,7 @@ public final class Repository {
     
     /**
      * Get a list of all metrics 
-     * @return 
+     * @return list of metrics
      */
     public List<Metric> listMetrics() {
         return List.copyOf(metrics);

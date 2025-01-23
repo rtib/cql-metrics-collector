@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Application context.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class Context {
     private static final Logger LOG = LoggerFactory.getLogger(Context.class);
@@ -70,16 +70,56 @@ public final class Context {
         return instance;
     }
     
+    /**
+     * Configuration object to access the root section of application config.
+     */
     public Config rootConfig;
+    
+    /**
+     * CQL session object connected to Apache Cassandra.
+     */
     public CqlSession cqlSession;
+    
+    /**
+     * System information entity.
+     */
     public SystemInfo systemInfo;
+    
+    /**
+     * DAO to access system keyspace.
+     */
     public DaoSystem systemDao;
+    
+    /**
+     * DAO to access system_virtual_schema keyspace.
+     */
     public DaoSystemVirtualSchema systemVirtualSchemaDao;
+    
+    /**
+     * DAO to access system_vies keyspace.
+     */
     public DaoSystemViews systemViewsDao;
+    
+    /**
+     * DAO to access system_schema keyspace.
+     */
     public DaoSystemSchema systemSchemaDao;
+    
+    /**
+     * Thread pool executor service for scheduled CQL queries.
+     */
     public ScheduledExecutorService queryExecutor;
+    
+    /**
+     * Project properties `application-name` and `application-version`
+     */
     public final Properties projectProperties;
+    
+    /**
+     * List of labels which will be applied to all metric instances.
+     */
     public List<Label> commonLabels = Collections.emptyList();
+    
     private Duration configReloadInterval = Duration.ZERO;
 
     /**

@@ -23,7 +23,7 @@ import com.datastax.oss.driver.api.mapper.annotations.Mapper;
 /**
  * Interface of an object to map DAO to the system_views keyspace.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Mapper
 public interface MapperSystemViews {

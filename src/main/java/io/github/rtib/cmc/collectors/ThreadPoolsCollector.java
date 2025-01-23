@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Collector of thread pools metrics.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class ThreadPoolsCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolsCollector.class);
@@ -44,6 +44,9 @@ public class ThreadPoolsCollector extends AbstractCollector {
     private Metric metricGauge;
     private Metric metricCounter;
 
+    /**
+     * Create the collector.
+     */
     public ThreadPoolsCollector() {
         super("thread_pools");
     }
@@ -130,7 +133,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
         }
     }
 
-    public static final class Config {
+    private static final class Config {
         private Duration updateInterval = Duration.ofMinutes(1);
         private Duration metricsCollectionInterval = Duration.ofSeconds(10);
 

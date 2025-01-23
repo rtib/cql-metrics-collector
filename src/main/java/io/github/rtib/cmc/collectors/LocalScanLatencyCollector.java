@@ -21,10 +21,13 @@ import io.github.rtib.cmc.model.system_views.Latency;
 
 /**
  * Collect local_read_latency metrics for every table.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class LocalScanLatencyCollector extends AbstractLatencyCollector {
 
+    /**
+     * Create the collector instance.
+     */
     public LocalScanLatencyCollector() {
         super("local_scan_latency");
     }

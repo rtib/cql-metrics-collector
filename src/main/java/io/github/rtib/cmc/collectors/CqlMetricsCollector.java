@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Collector of system cache metrics.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class CqlMetricsCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(CqlMetricsCollector.class);
@@ -40,6 +40,9 @@ public class CqlMetricsCollector extends AbstractCollector {
     
     private Metric metric;
 
+    /**
+     * Initialize collector.
+     */
     public CqlMetricsCollector() {
         super("cql_metrics");
     }
@@ -104,7 +107,7 @@ public class CqlMetricsCollector extends AbstractCollector {
         }
     }
     
-    public static final class Config {
+    private static final class Config {
         private Duration updateInterval = Duration.ofMinutes(1);
         private Duration metricsCollectionInterval = Duration.ofSeconds(10);
 

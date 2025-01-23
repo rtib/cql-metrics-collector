@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * HTTP server exporting the metrics.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class HTTPServer implements Closeable {
 
@@ -61,12 +61,19 @@ public class HTTPServer implements Closeable {
         this.server.createContext("/metrics", new MetricsHandler());
     }
 
+    /**
+     * Start the service instance.
+     * @return the server instance
+     */
     public HTTPServer start() {
         threadpool.submit(this.server::start);
         LOG.atDebug().log("HTTPServer started.");
         return this;
     }
     
+    /**
+     * Shut down the server instance.
+     */
     public void stop() {
         close();
     }
@@ -78,6 +85,9 @@ public class HTTPServer implements Closeable {
         threadpool.shutdown();
     }
     
+    /**
+     * Configuration bean.
+     */
     public static final class Config {
         private final int port = 9500;
         private final int minThreads = 1;
@@ -85,34 +95,78 @@ public class HTTPServer implements Closeable {
         private final Duration keepalive = Duration.ofSeconds(120);
         private final Duration maxReqTime = Duration.ofSeconds(60);
         private final Duration maxRspTime = Duration.ofSeconds(600);
+
+        /**
+         * Default constructor.
+         */
+        public Config() {
+        }
         
+        /**
+         * Port the HTTP server should listen on.
+         * @return port number
+         */
         public int port() {
             return this.port;
         }
         
+        /**
+         * Lower bound of server threads hold available.
+         * @return number of threads
+         */
         public int minThreads() {
             return this.minThreads;
         }
         
+        /**
+         * Upper limit of server threads to be created.
+         * @return number of threads
+         */
         public int maxThreads() {
             return this.maxThreads;
         }
         
+        /**
+         * Duration to keep alive idle thread before throw away.
+         * @return keep alive duration
+         */
         public Duration keepalive() {
             return this.keepalive;
         }
         
+        /**
+         * Max time allowed for a request transmission.
+         * @return Duration of a HTTP request transmission
+         */
         public Duration maxReqTime() {
             return this.maxReqTime;
         }
         
+        /**
+         * Max time allowed for a response transmission.
+         * @return Duration of a HTTP response transmission
+         */
         public Duration maxRspTime() {
             return this.maxRspTime;
         }
     }
     
+    /**
+     * Builder class
+     */
     public static class Builder {
         
+        /**
+         * Create the builder.
+         */
+        public Builder() {
+        }
+        
+        /**
+         * Build the HTTPServer instance.
+         * @return the created instance
+         * @throws HTTPServerException wrapping IOException of socket creation
+         */
         public HTTPServer build() throws HTTPServerException {
             InetSocketAddress listen = new InetSocketAddress(config.port());
             LOG.info("Building HTTP server listening on {}", listen);

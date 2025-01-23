@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Collector of system cache metrics.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class CachesCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(CachesCollector.class);
@@ -44,6 +44,9 @@ public class CachesCollector extends AbstractCollector {
     private Metric metricGauge;
     private Metric metricCounter;
 
+    /**
+     * Create the collector instance.
+     */
     public CachesCollector() {
         super("caches");
     }
@@ -138,7 +141,7 @@ public class CachesCollector extends AbstractCollector {
         }
     }
     
-    public static final class Config {
+    private static final class Config {
         private Duration updateInterval = Duration.ofMinutes(1);
         private Duration metricsCollectionInterval = Duration.ofSeconds(10);
 

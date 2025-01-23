@@ -20,6 +20,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 /**
  * Abstract entity class for table bound latency metrics.
  * 
+ * <pre>
  * VIRTUAL TABLE system_views.[coordinator|local]_[read|scan|write]_latency (
  *     keyspace_name text,
  *     table_name text,
@@ -30,12 +31,13 @@ import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
  *     per_second double,
  *     PRIMARY KEY ((keyspace_name, table_name))
  * ) WITH comment = '';
+ * </pre>
  * 
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public abstract class Latency {
 
@@ -49,7 +51,7 @@ public abstract class Latency {
 
     /**
      * Get keyspace name.
-     * @return 
+     * @return keyspace_name
      */
     public String keyspace_name() {
         return keyspace_name;
@@ -57,7 +59,7 @@ public abstract class Latency {
 
     /**
      * Get table name.
-     * @return 
+     * @return table_name
      */
     public String table_name() {
         return table_name;
@@ -65,7 +67,7 @@ public abstract class Latency {
 
     /**
      * Get request count.
-     * @return 
+     * @return request count
      */
     public long count() {
         return count;
@@ -73,7 +75,7 @@ public abstract class Latency {
 
     /**
      * Get max request duration in milliseconds.
-     * @return 
+     * @return max latency in milliseconds
      */
     public double max_ms() {
         return max_ms;
@@ -81,7 +83,7 @@ public abstract class Latency {
 
     /**
      * Get p50th percentile of request durations in milliseconds.
-     * @return 
+     * @return p50th latency in milliseconds
      */
     public double p50th_ms() {
         return p50th_ms;
@@ -89,7 +91,7 @@ public abstract class Latency {
 
     /**
      * Get p99th percentile of request durations in milliseconds.
-     * @return 
+     * @return p99th latency in milliseconds
      */
     public double p99th_ms() {
         return p99th_ms;
@@ -97,12 +99,22 @@ public abstract class Latency {
 
     /**
      * Get request rate.
-     * @return 
+     * @return request rate per second
      */
     public double per_second() {
         return per_second;
     }
     
+    /**
+     * Create the entity with initial values.
+     * @param keyspace_name initial keyspace_name
+     * @param table_name initial table_name
+     * @param count initial request count
+     * @param max_ms initial max latency ms
+     * @param p50th_ms initial p50th latency ms
+     * @param p99th_ms initial p99th latency ms
+     * @param per_second initial request rate per second
+     */
     Latency(
             String keyspace_name,
             String table_name,
@@ -128,8 +140,8 @@ public abstract class Latency {
 
     /**
      * Get keyspace name.
-     * @return 
-     * @deprecated 
+     * @return keyspace_name
+     * @deprecated Use {@code keyspace_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getKeyspace_name() {
@@ -138,8 +150,8 @@ public abstract class Latency {
 
     /**
      * Get table name.
-     * @return 
-     * @deprecated 
+     * @return table_name
+     * @deprecated Use {@code table_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getTable_name() {
@@ -148,8 +160,8 @@ public abstract class Latency {
 
     /**
      * Get request count.
-     * @return 
-     * @deprecated 
+     * @return request count
+     * @deprecated Use {@code count()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getCount() {
@@ -158,8 +170,8 @@ public abstract class Latency {
 
     /**
      * Get max request duration in milliseconds.
-     * @return 
-     * @deprecated 
+     * @return max latency in milliseconds
+     * @deprecated Use {@code max_ms()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getMax_ms() {
@@ -168,8 +180,8 @@ public abstract class Latency {
 
     /**
      * Get p50th percentile of request durations in milliseconds.
-     * @return 
-     * @deprecated 
+     * @return p50th latency in milliseconds.
+     * @deprecated Use {@code p50th_ms()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP50th_ms() {
@@ -178,8 +190,8 @@ public abstract class Latency {
 
     /**
      * Get p99th percentile of request durations in milliseconds.
-     * @return 
-     * @deprecated 
+     * @return p99th latency in milliseconds
+     * @deprecated Use {@code p99ths()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP99th_ms() {
@@ -188,8 +200,8 @@ public abstract class Latency {
 
     /**
      * Get request rate.
-     * @return 
-     * @deprecated 
+     * @return request rate per seconds
+     * @deprecated Use {@code rate()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getPer_second() {

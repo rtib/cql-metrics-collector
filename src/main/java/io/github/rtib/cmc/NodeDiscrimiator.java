@@ -23,12 +23,16 @@ import java.net.InetSocketAddress;
 /**
  * Simple node discriminator excluding all nodes except the monitored one.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class NodeDiscrimiator implements NodeDistanceEvaluator {
 
     private final InetSocketAddress preferedNode;
     
+    /**
+     * Create the instance.
+     * @param preferedNode the node address to be preferred
+     */
     public NodeDiscrimiator(InetSocketAddress preferedNode) {
         this.preferedNode = preferedNode;
     }

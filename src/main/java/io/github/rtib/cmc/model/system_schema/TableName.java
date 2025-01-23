@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * Fully qualified table, consisting of keyspace and table names.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @CqlName("tables")
@@ -34,6 +34,11 @@ public final class TableName implements MetricsIdentifier {
     private final String keyspace_name;
     private final String table_name;
 
+    /**
+     * Create the entity instance.
+     * @param keyspace_name initial value
+     * @param table_name initial value
+     */
     public TableName(String keyspace_name, String table_name) {
         this.keyspace_name = keyspace_name;
         this.table_name = table_name;
@@ -58,7 +63,7 @@ public final class TableName implements MetricsIdentifier {
      * Get the value of keyspace_name
      *
      * @return the value of keyspace_name
-     * @deprecated
+     * @deprecated Use {@link keyspace_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getKeyspace_name() { return keyspace_name; }
@@ -68,7 +73,7 @@ public final class TableName implements MetricsIdentifier {
      * Get the value of table_name
      *
      * @return the value of table_name
-     * @deprecated
+     * @deprecated Use {@link table_name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getTable_name() { return table_name; }

@@ -21,10 +21,13 @@ import io.github.rtib.cmc.model.system_views.Latency;
 
 /**
  * Collect coordinator_scan_latency metrics for every table.
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class CoordinatorScanLatencyCollector extends AbstractLatencyCollector {
 
+    /**
+     * Create the collector instance.
+     */
     public CoordinatorScanLatencyCollector() {
         super("coordinator_scan_latency");
     }

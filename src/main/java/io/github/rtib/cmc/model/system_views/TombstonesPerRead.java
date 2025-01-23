@@ -20,7 +20,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
  * Entity class for system_views.tombstones_per_read virtual table.
- * 
+ * <pre>
  * VIRTUAL TABLE system_views.tombstones_per_read (
  *     keyspace_name text,
  *     table_name text,
@@ -30,17 +30,26 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  *     p99th double,
  *     PRIMARY KEY ((keyspace_name, table_name))
  * ) WITH comment = '';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @PropertyStrategy(mutable = false)
 public final class TombstonesPerRead extends TableSummary {
 
+    /**
+     * Create entity instance.
+     * @param keyspace_name initial value
+     * @param table_name initial value
+     * @param count initial value
+     * @param max initial value
+     * @param p50th initial value
+     * @param p99th initial value
+     */
     public TombstonesPerRead(String keyspace_name, String table_name, long count, double max, double p50th, double p99th) {
         super(keyspace_name, table_name, count, max, p50th, p99th);
     }

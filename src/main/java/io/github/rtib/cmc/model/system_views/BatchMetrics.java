@@ -21,7 +21,7 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
  * Entity class for system_views.batch_metrics virtual table.
- *
+ * <pre>
  * VIRTUAL TABLE system_views.batch_metrics (
  *     name text PRIMARY KEY,
  *     max bigint,
@@ -29,12 +29,12 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
  *     p999th double,
  *     p99th double
  * ) WITH comment = 'Metrics specific to batch statements';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @PropertyStrategy(mutable = false)
@@ -46,6 +46,14 @@ public final class BatchMetrics {
     private final double p999th;
     private final double p99th;
 
+    /**
+     * Create entity instance.
+     * @param name initial value
+     * @param max initial value
+     * @param p50th initial value
+     * @param p999th initial value
+     * @param p99th initial value
+     */
     public BatchMetrics(String name, long max, double p50th, double p999th, double p99th) {
         this.name = name;
         this.max = max;
@@ -108,7 +116,7 @@ public final class BatchMetrics {
      * Get the value of name
      *
      * @return the value of name
-     * @deprecated 
+     * @deprecated Use {@link name()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public String getName() {
@@ -119,7 +127,7 @@ public final class BatchMetrics {
      * Get the value of max
      *
      * @return the value of max
-     * @deprecated 
+     * @deprecated Use {@link max()} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public long getMax() {
@@ -130,7 +138,7 @@ public final class BatchMetrics {
      * Get the value of p50th
      *
      * @return the value of p50th
-     * @deprecated 
+     * @deprecated Use {@link p50th} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP50th() {
@@ -141,7 +149,7 @@ public final class BatchMetrics {
      * Get the value of p99th
      *
      * @return the value of p99th
-     * @deprecated 
+     * @deprecated Use {@link p99th} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP99th() {
@@ -152,7 +160,7 @@ public final class BatchMetrics {
      * Get the value of p999th
      *
      * @return the value of p999th
-     * @deprecated 
+     * @deprecated Use {@link p999th} instead. Will be discontinued with Java-14.
      */
     @Deprecated
     public double getP999th() {

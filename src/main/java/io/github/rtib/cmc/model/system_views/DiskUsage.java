@@ -20,24 +20,30 @@ import com.datastax.oss.driver.api.mapper.annotations.PropertyStrategy;
 
 /**
  * Entity class for system_views.disk_usage virtual table.
- * 
+ * <pre>
  * VIRTUAL TABLE system_views.disk_usage (
  *   keyspace_name text,
  *   table_name text,
  *   mebibytes bigint,
  * PRIMARY KEY ((keyspace_name, table_name))
  * ) WITH comment = '';
- * 
+ * </pre>
  * This read-only entity class provides property getter methods of the legacy bean pattern as well, as
  * record style getter methods for forward compatibility with Java-14 records. Legacy getter methods are
  * annotated deprecated.
  *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Entity
 @PropertyStrategy(mutable = false)
 public final class DiskUsage extends TableSize {
 
+    /**
+     * Create entity instance.
+     * @param keyspace_name initial value
+     * @param table_name initial value
+     * @param mebibytes initial value
+     */
     public DiskUsage(String keyspace_name, String table_name, long mebibytes) {
         super(keyspace_name, table_name, mebibytes);
     }

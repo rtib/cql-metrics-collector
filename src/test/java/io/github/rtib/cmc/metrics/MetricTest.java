@@ -25,7 +25,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class MetricTest {
 

@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Collector of batch statement metrics.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class BatchMetricsCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(BatchMetricsCollector.class);
@@ -41,6 +41,9 @@ public class BatchMetricsCollector extends AbstractCollector {
     private Metric metricGauge;
     private Metric metricSummary;
 
+    /**
+     * Create collector instance.
+     */
     public BatchMetricsCollector() {
         super("batch_metrics");
     }

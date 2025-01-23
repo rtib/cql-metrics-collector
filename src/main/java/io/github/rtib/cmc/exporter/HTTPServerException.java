@@ -16,19 +16,32 @@
 package io.github.rtib.cmc.exporter;
 
 /**
- *
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * Exception thrown by exporter package.
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class HTTPServerException extends Exception {
 
+    /**
+     * Create an instance.
+     * @param message exception message
+     */
     public HTTPServerException(String message) {
         super(message);
     }
 
+    /**
+     * Create an instance.
+     * @param message exception message
+     * @param cause wrapped exception
+     */
     public HTTPServerException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Create an instance.
+     * @param cause wrapped exception
+     */
     public HTTPServerException(Throwable cause) {
         super(cause);
     }

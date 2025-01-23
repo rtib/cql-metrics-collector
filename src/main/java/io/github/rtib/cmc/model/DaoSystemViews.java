@@ -42,7 +42,7 @@ import io.github.rtib.cmc.model.system_views.TombstonesPerRead;
 /**
  * Interface of a data access object allowing to access information within system_views.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Dao
 public interface DaoSystemViews {
@@ -50,8 +50,8 @@ public interface DaoSystemViews {
     
     /**
      * Get an DiskUsage entity to a specific table.
-     * @param keyspace_name keyspace containing the table
-     * @param table_name table name
+     * @param keyspace_name selector value
+     * @param table_name selector value
      * @return an Entity
      */
     @Select
@@ -74,7 +74,7 @@ public interface DaoSystemViews {
     
     /**
      * List cache names.
-     * @return 
+     * @return list of cache names
      */
     @Query("SELECT name FROM system_views.caches")
     PagingIterable<CacheName> listCaches();
@@ -82,127 +82,127 @@ public interface DaoSystemViews {
     /**
      * Get metrics of the specified system cache.
      * @param name system cache name
-     * @return 
+     * @return Cache entity
      */
     @Select
     Caches caches(String name);
     
     /**
      * Get coordinator read latency metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     CoordinatorReadLatency CoordinatorReadLatency(String keyspace_name, String table_name);
     
     /**
      * Get coordinator write latency metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     CoordinatorWriteLatency CoordinatorWriteLatency(String keyspace_name, String table_name);
     
     /**
      * Get coordinator scan latency metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     CoordinatorScanLatency CoordinatorScanLatency(String keyspace_name, String table_name);
     
     /**
      * Get local read latency metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     LocalReadLatency LocalReadLatency(String keyspace_name, String table_name);
     
     /**
      * Get local write latency metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     LocalWriteLatency LocalWriteLatency(String keyspace_name, String table_name);
     
     /**
      * Get local scan latency metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     LocalScanLatency LocalScanLatency(String keyspace_name, String table_name);
     
     /**
      * Get tombstones per read metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     TombstonesPerRead TombstonesPerRead(String keyspace_name, String table_name);
     
     /**
      * Get rows per read metrics for a given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return latency entity
      */
     @Select
     RowsPerRead RowsPerRead(String keyspace_name, String table_name);
     
     /**
      * List the names of batch statements.
-     * @return 
+     * @return list of batch metric names
      */
     @Query("SELECT name FROM system_views.batch_metrics")
     PagingIterable<BatchMetricsName> listBatchStatements();
     
     /**
      * Get metrics specific to batch a given statement.
-     * @param name
-     * @return 
+     * @param name selector value
+     * @return metrics entity
      */
     @Select
     BatchMetrics BatchMetrics(String name);
     
     /**
      * Get the max partition size of the given table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return metrics entity
      */
     @Select
     MaxPartitionSize MaxPartitionSize(String keyspace_name, String table_name);
     
     /**
      * List the names of available CQL metrics.
-     * @return 
+     * @return list of cql metrics
      */
     @Query("SELECT name FROM system_views.cql_metrics")
     PagingIterable<CqlMetricsName> listCqlMetrics();
     
     /**
      * Get the CqlMetrics for a name.
-     * @param name
-     * @return 
+     * @param name selector value
+     * @return metrics entity
      */
     @Select
     CqlMetrics CqlMetrics(String name);
     
     /**
      * Get max sstable size of a table.
-     * @param keyspace_name
-     * @param table_name
-     * @return 
+     * @param keyspace_name selector value
+     * @param table_name selector value
+     * @return metrics entity
      */
     @Select
     MaxSstableSize MaxSstableSize(String keyspace_name, String table_name);

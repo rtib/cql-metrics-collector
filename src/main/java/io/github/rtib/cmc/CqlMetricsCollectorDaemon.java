@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Main class.
  * 
- * @author Tibor Répási <rtib@users.noreply.github.com>
+ * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public class CqlMetricsCollectorDaemon {
     private static final Logger LOG;
@@ -59,6 +59,10 @@ public class CqlMetricsCollectorDaemon {
     private CqlMetricsCollectorDaemon() {
     }
     
+    /**
+     * Main program entry point.
+     * @param args command line argument list
+     */
     public static void main(String... args) {
         instance.activate();
         
