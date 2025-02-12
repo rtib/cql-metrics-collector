@@ -1,35 +1,4 @@
 {
-  "__inputs": [
-
-  ],
-  "__elements": {
-  },
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "10.4.2"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -49,13 +18,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 4,
   "links": [
 
   ],
   "panels": [
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -91,6 +59,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -102,10 +71,9 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "sum(cassandra_disk_usage{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"})",
@@ -122,7 +90,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -158,6 +125,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -169,10 +137,9 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "max(cassandra_max_partition_size{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"})",
@@ -189,7 +156,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -225,6 +191,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -236,10 +203,9 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "max(cassandra_tombstones_per_read{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", metric=\"max\"})",
@@ -256,7 +222,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -269,6 +234,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 35,
             "gradientMode": "opacity",
@@ -329,13 +295,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_disk_usage{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"}",
@@ -352,7 +319,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -365,6 +331,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -429,13 +396,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_max_partition_size{cluster=\"$cluster\", keyspace=\"$keyspace_name\", table=\"$table_name\"}",
@@ -467,7 +435,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -480,6 +447,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -540,13 +508,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_local_read_latency_rate{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"}",
@@ -563,7 +532,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -576,6 +544,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -636,13 +605,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_local_scan_latency_rate{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"}",
@@ -659,7 +629,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -672,6 +641,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -732,13 +702,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "cassandra_local_write_latency_rate{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"}",
@@ -770,7 +741,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -815,8 +785,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -849,7 +818,6 @@
       },
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_read_latency_max{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"})",
@@ -863,7 +831,6 @@
           "useBackend": false
         },
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_read_latency_bucket{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", quantile=\"0.5\"})",
@@ -877,7 +844,6 @@
           "useBackend": false
         },
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_read_latency_bucket{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", quantile=\"0.99\"})",
@@ -895,7 +861,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -940,8 +905,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -974,7 +938,6 @@
       },
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_scan_latency_max{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"})",
@@ -988,7 +951,6 @@
           "useBackend": false
         },
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_scan_latency_bucket{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", quantile=\"0.5\"})",
@@ -1002,7 +964,6 @@
           "useBackend": false
         },
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_scan_latency_bucket{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", quantile=\"0.99\"})",
@@ -1020,7 +981,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1065,8 +1025,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -1099,7 +1058,6 @@
       },
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_write_latency_max{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\"})",
@@ -1113,7 +1071,6 @@
           "useBackend": false
         },
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_write_latency_bucket{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", quantile=\"0.5\"})",
@@ -1127,7 +1084,6 @@
           "useBackend": false
         },
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "max(cassandra_local_write_latency_bucket{cluster=\"$cluster\", dc=~\"$dc\", rack=~\"$rack\", keyspace=\"$keyspace_name\", table=\"$table_name\", quantile=\"0.99\"})",
@@ -1145,7 +1101,9 @@
       "type": "timeseries"
     }
   ],
-  "schemaVersion": 39,
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 40,
   "tags": [
     "Cassandra"
   ],
@@ -1154,12 +1112,9 @@
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values(cluster)",
-        "hide": 0,
         "includeAll": false,
         "label": "Cluster",
-        "multi": false,
         "name": "cluster",
         "options": [
 
@@ -1171,16 +1126,12 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values({cluster=\"$cluster\"},dc)",
-        "hide": 0,
         "includeAll": true,
         "label": "DC",
         "multi": true,
@@ -1195,16 +1146,12 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values({cluster=\"$cluster\"},rack)",
-        "hide": 0,
         "includeAll": true,
         "label": "Rack",
         "multi": true,
@@ -1219,19 +1166,14 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values({cluster=\"$cluster\"},keyspace)",
-        "hide": 0,
         "includeAll": false,
         "label": "Keyspace",
-        "multi": false,
         "name": "keyspace_name",
         "options": [
 
@@ -1243,19 +1185,14 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values({keyspace=\"$keyspace_name\"},table)",
-        "hide": 0,
         "includeAll": false,
         "label": "Table",
-        "multi": false,
         "name": "table_name",
         "options": [
 
@@ -1267,8 +1204,6 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       }
     ]
@@ -1282,6 +1217,8 @@
   "timezone": "browser",
   "title": "Schema details",
   "uid": "aea61g8aucs8wd",
-  "version": 5,
-  "weekStart": ""
+  "weekStart": "",
+  "__inputs": [
+
+  ]
 }

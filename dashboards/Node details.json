@@ -1,35 +1,4 @@
 {
-  "__inputs": [
-
-  ],
-  "__elements": {
-  },
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "barchart",
-      "name": "Bar chart",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "10.4.2"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -49,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": null,
+  "id": 3,
   "links": [
 
   ],
@@ -70,7 +39,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -143,15 +111,16 @@
         "showValue": "auto",
         "stacking": "normal",
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         },
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_disk_usage{cluster=\"$cluster\", node=\"$node\"}",
@@ -183,7 +152,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -196,6 +164,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -260,13 +229,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_batch_metrics{cluster=\"$cluster\", node=\"$node\"}",
@@ -283,7 +253,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -296,6 +265,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -360,13 +330,14 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.1",
       "targets": [
         {
-          "datasource": null,
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "cassandra_batch_metrics_bucket{cluster=\"$cluster\", node=\"$node\", quantile=\"$quantile\"}",
@@ -394,7 +365,6 @@
       "id": 10,
       "panels": [
         {
-          "datasource": null,
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -440,8 +410,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -478,7 +447,6 @@
           },
           "targets": [
             {
-              "datasource": null,
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "cassandra_system_cache_counter{node=\"$node\", cache=\"$system_caches\", metric=\"entry_count\"}",
@@ -495,7 +463,6 @@
           "type": "timeseries"
         },
         {
-          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -540,8 +507,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -578,7 +544,6 @@
           },
           "targets": [
             {
-              "datasource": null,
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "rate(cassandra_system_cache_counter{node=\"$node\", cache=\"$system_caches\", metric=\"request_count\"}[1h])",
@@ -591,7 +556,6 @@
               "useBackend": false
             },
             {
-              "datasource": null,
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "rate(cassandra_system_cache_counter{node=\"$node\", cache=\"$system_caches\", metric=\"hit_count\"}[1h])",
@@ -610,7 +574,6 @@
         }
       ],
       "repeat": "system_caches",
-      "repeatDirection": "h",
       "title": "System caches - $system_caches",
       "type": "row"
     },
@@ -620,12 +583,11 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 20
       },
       "id": 6,
       "panels": [
         {
-          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -670,8 +632,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -688,7 +649,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 30
+            "y": 38
           },
           "id": 7,
           "options": {
@@ -707,7 +668,6 @@
           },
           "targets": [
             {
-              "datasource": null,
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "cassandra_thread_pools{cluster=\"$cluster\", node=\"$node\", threadpool=\"$threadpool\"}",
@@ -724,7 +684,6 @@
           "type": "timeseries"
         },
         {
-          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -769,8 +728,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -787,7 +745,7 @@
             "h": 8,
             "w": 6,
             "x": 12,
-            "y": 30
+            "y": 38
           },
           "id": 8,
           "options": {
@@ -806,7 +764,6 @@
           },
           "targets": [
             {
-              "datasource": null,
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "rate(cassandra_completed_tasks_counter{cluster=\"$cluster\", node=\"$node\", threadpool=~\"$threadpool\"}[$__rate_interval])",
@@ -824,12 +781,13 @@
         }
       ],
       "repeat": "threadpool",
-      "repeatDirection": "h",
       "title": "Threadpool - $threadpool",
       "type": "row"
     }
   ],
-  "schemaVersion": 39,
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 40,
   "tags": [
     "Cassandra"
   ],
@@ -838,12 +796,9 @@
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values(cassandra_disk_usage,cluster)",
-        "hide": 0,
         "includeAll": false,
         "label": "Cluster",
-        "multi": false,
         "name": "cluster",
         "options": [
 
@@ -855,19 +810,14 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values(cassandra_disk_usage{cluster=\"$cluster\"},node)",
-        "hide": 0,
         "includeAll": false,
         "label": "Node",
-        "multi": false,
         "name": "node",
         "options": [
 
@@ -879,19 +829,14 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values(cassandra_batch_metrics_bucket,quantile)",
-        "hide": 0,
         "includeAll": false,
         "label": "Quantile",
-        "multi": false,
         "name": "quantile",
         "options": [
 
@@ -903,16 +848,12 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values(cassandra_thread_pools,threadpool)",
-        "hide": 0,
         "includeAll": true,
         "label": "Threadpools",
         "multi": true,
@@ -927,16 +868,12 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "current": {
         },
-        "datasource": null,
         "definition": "label_values(cassandra_system_cache_counter,cache)",
-        "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "system_caches",
@@ -950,8 +887,6 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       }
     ]
@@ -961,11 +896,12 @@
     "to": "now"
   },
   "timepicker": {
-    "hidden": false
   },
   "timezone": "browser",
   "title": "Node details",
   "uid": "bea9cflw202rkf",
-  "version": 15,
-  "weekStart": ""
+  "weekStart": "",
+  "__inputs": [
+
+  ]
 }
