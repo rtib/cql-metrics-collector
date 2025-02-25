@@ -4,18 +4,10 @@ In this folder a demonstration appliance is available to scrape metrics from Cas
 
 ## Usage
 
-Set up the list of Cassandra nodes equipped with cql-metrics-collector in `demo/prometheus/cassandra_targets.json` and start the demo with
+Set up the list of Cassandra nodes equipped with cql-metrics-collector in `demo/cassandra_targets.json`. Start the demo with
 
 ``` % docker-compose up```
 
-Then go to http://localhost:3000 where a Grafana with provisioned dashboards should be available.
+This will bring up two containers, one running [VictoriaMetrics](https://docs.victoriametrics.com/) configured to scrape the cql-metrics-collector targets listed in `cassandra_targets.json`. A second container will run a [Grafana](https://grafana.com/oss/grafana/) with provisioned datasource and the pre-built dashboards available.
 
-## Dashboards
-
-Predefined dashboards are availble at `../dashboards` folder. Dashboards found there are provisioned into the demo environment and can also be imported to a Grafana having a Prometheus datasource configured as default providing the metrics collected from cql-metrics-collector instances.
-
-Currently available dashboards are
-
-* Cluster Overview - providing an overview of the whole Cluster
-* Schema details - insights into the metrics of a selected keyspace/table
-* Node details - per node metrics on the operation and service a selected node
+Go to http://localhost:3000 where the demo will be available.

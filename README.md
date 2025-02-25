@@ -9,10 +9,48 @@ Implemented as a sidecar service, cql-metrics-exporter is connecting an Apache
 Cassandra node via localhost, queries its metrics via regular CQL and exports
 them in Prometheus' text format on http://localhost:9500/metrics endpoint.
 
+## Installation
+
+Unback any of the bundles or install the Debian package provided in the release.
+
+When installing the Debian package, a system user for the service will also be created and a SystemD service unit is installed, allowing to launch and control the application instance.
+
+## Configuration
+
+The project used [Typesafe config](https://lightbend.github.io/config/) for configuration. The main configuration file is placed at [/etc/application.conf](conf/application.conf) containing commented basic configuration.
+
+If the Cassandra node is requiring user authentication, a tool user might be created in Cassandra. When using Cassandra `PasswordAuthenticator` and `CassandraAuthorizer`, follow the example below to set up a tool user"
+
+```cql
+cassandra@cqlsh> CREATE ROLE monitor WITH PASSWORD = 'secret' AND LOGIN = true AND SUPERUSER = false;
+cassandra@cqlsh> GRANT SELECT PERMISSION ON KEYSPACE system_virtual_schema TO monitor;
+cassandra@cqlsh> GRANT SELECT PERMISSION ON KEYSPACE system_views TO monitor;
+```
+
+Then follow the example in [/etc/application.conf](conf/application.conf) to set up the application authentication:
+
+```
+datastax-java-driver.advanced.auth-provider {
+  class = PlainTextAuthProvider
+  username = monitor
+  password = secret
+}
+```
+
+For more detailed configuration parameters refer to [reference.conf](src/main/resources/reference.conf).
+
 ## Usage
 
 The service may be started within an unprivileged user context with
 `bin/cql-metrics-collector`.
+
+Or on Debian deployments just start the `cql-metrics-collector.service` unit with systemctl.
+
+Metrics can be collected from HTTP `/metrics` endpoint available by default on port 9500.
+
+## Dashboards
+
+Metrics collected by a TSDB, e.g. [VictoriaMetrics](https://docs.victoriametrics.com/) can be visualized with e.g. [Grafana](https://grafana.com/oss/grafana/). While you are free to create metrics based visualizations, a few pre-defined dashboards are available in the [dashboards](dashboards) folder. These are part of the release, packaged in `dashboards.tar.gz` and can be imported to any Grafana instance.
 
 ## Metrics labels
 
