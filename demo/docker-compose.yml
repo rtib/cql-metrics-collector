@@ -1,17 +1,17 @@
 ---
 services:
-  prometheus:
-    image: prom/prometheus:v2.24.1
-    container_name: prometheus
+  victoria:
+    image: victoriametrics/victoria-metrics:v1.63.0
+    container_name: victoria
     command:
-      - --config.file=/etc/prometheus/prometheus.yaml
-      - --storage.tsdb.path=/prometheus
+      - -storageDataPath=/victoria-metrics-data
+      - -promscrape.config=/scraper-config.yaml
     ports:
-      - 9090:9090
+      - 8428:8428
     volumes:
-      - "${PROMETHEUS_DATA_DIR:-prometheus}:/prometheus"
-      - "./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml"
-      - "./prometheus/cassandra_targets.json:/etc/prometheus/cassandra_targets.json"
+      - "${VICTORIA_DATA_DIR:-victoria}:/victoria-metrics-data"
+      - "./victoria/scraper_config.yaml:/scraper-config.yaml"
+      - "./cassandra_targets.json:/cassandra_targets.json"
   grafana:
     image: grafana/grafana:11.5.1
     container_name: grafana
@@ -22,9 +22,9 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
     volumes:
       - "${GRAFANA_DATA_DIR:-grafana}:/var/lib/grafana"
-      - "./grafana/prome-datasource.yaml:/etc/grafana/provisioning/datasources/prome-datasource.yaml"
+      - "./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml"
       - "./grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml"
       - "../dashboards:/var/lib/grafana/dashboards/Apache Cassandra Dashboards:ro"
 volumes:
+  victoria:
   grafana:
-  prometheus:
