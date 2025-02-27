@@ -88,6 +88,7 @@ public abstract class AbstractCollector implements ICollector {
                 new Thread(() -> update()),
                 ThreadLocalRandom.current().nextLong(config.getUpdateInitialDelay().toSeconds()),
                 updateInterval.getSeconds(), TimeUnit.SECONDS);
+        setup();
     }
 
     @Override
@@ -178,6 +179,13 @@ public abstract class AbstractCollector implements ICollector {
      * @return List of instance identifiers.
      */
     protected abstract List<? extends MetricsIdentifier> getInstances();
+    
+    /**
+     * Called during activate() to do optional setup of an collector instance.
+     */
+    protected void setup() {
+        
+    }
 
     /**
      * Updating the collector threads run by this class. It is enumerating all

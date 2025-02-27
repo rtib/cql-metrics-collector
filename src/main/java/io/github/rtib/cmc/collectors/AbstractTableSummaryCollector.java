@@ -53,7 +53,7 @@ public abstract class AbstractTableSummaryCollector extends AbstractTableCollect
     @Override
     public void activate() throws CollectorException {
         if (!isAvailable()) {
-            LOG.info("Metrics class not supported.");
+            LOG.warn("Metrics collector class {} not supported.", this.getClass().getSimpleName());
             return;
         }
         try {
@@ -72,7 +72,7 @@ public abstract class AbstractTableSummaryCollector extends AbstractTableCollect
                     .build();
             Repository.getInstance().add(metricCount);
         } catch (MetricException ex) {
-            throw new CollectorException("Failed to initialize collector metrics.", ex);
+            throw new CollectorException(String.format("{}: failed to initialize collector metrics.", this.getClass().getSimpleName()), ex);
         }
         super.activate();
     }

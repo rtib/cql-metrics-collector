@@ -16,6 +16,8 @@
 package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
+import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.Latency;
 
@@ -24,6 +26,8 @@ import io.github.rtib.cmc.model.system_views.Latency;
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 public final class CoordinatorWriteLatencyCollector extends AbstractLatencyCollector {
+
+    private DaoSystemViewsV4 dao;
     
     /**
      * Create collector instance.
@@ -33,11 +37,16 @@ public final class CoordinatorWriteLatencyCollector extends AbstractLatencyColle
     }
     
     @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+    }
+
+    @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
         return new Collector(id) {
                 @Override
                 protected Latency getLatency() {
-                    return context.systemViewsDao.CoordinatorWriteLatency(table.keyspace_name(), table.table_name());
+                    return dao.CoordinatorWriteLatency(table.keyspace_name(), table.table_name());
                 }
             };
     }

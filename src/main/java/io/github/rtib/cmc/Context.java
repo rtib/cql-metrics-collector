@@ -24,11 +24,9 @@ import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.DaoSystem;
 import io.github.rtib.cmc.model.DaoSystemSchema;
-import io.github.rtib.cmc.model.DaoSystemViews;
 import io.github.rtib.cmc.model.DaoSystemVirtualSchema;
 import io.github.rtib.cmc.model.MapperSystem;
 import io.github.rtib.cmc.model.MapperSystemSchema;
-import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MapperSystemVirtualSchema;
 import io.github.rtib.cmc.model.system.SystemInfo;
 import java.io.IOException;
@@ -94,11 +92,6 @@ public final class Context {
      * DAO to access system_virtual_schema keyspace.
      */
     public DaoSystemVirtualSchema systemVirtualSchemaDao;
-    
-    /**
-     * DAO to access system_vies keyspace.
-     */
-    public DaoSystemViews systemViewsDao;
     
     /**
      * DAO to access system_schema keyspace.
@@ -235,10 +228,6 @@ public final class Context {
                     .builder(cqlSession)
                     .build()
                     .systemVirtualSchemaDao();
-            this.systemViewsDao = MapperSystemViews
-                    .builder(cqlSession)
-                    .build()
-                    .systemViewsDao();
             this.systemSchemaDao = MapperSystemSchema
                     .builder(cqlSession)
                     .build()

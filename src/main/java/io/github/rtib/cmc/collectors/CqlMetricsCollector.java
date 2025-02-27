@@ -20,6 +20,8 @@ import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.CqlMetrics;
 import io.github.rtib.cmc.model.system_views.CqlMetricsName;
@@ -38,6 +40,7 @@ public class CqlMetricsCollector extends AbstractCollector {
     // private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
     
     private Metric metric;
+    private DaoSystemViewsV4 dao;
 
     /**
      * Initialize collector.
@@ -67,6 +70,11 @@ public class CqlMetricsCollector extends AbstractCollector {
     }
 
     @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+    }
+
+    @Override
     public void deactivate() {
         super.deactivate();
         Repository.getInstance().remove(metric);
@@ -79,7 +87,7 @@ public class CqlMetricsCollector extends AbstractCollector {
 
     @Override
     protected List<? extends MetricsIdentifier> getInstances() {
-        return context.systemViewsDao.listCqlMetrics().all();
+        return dao.listCqlMetrics().all();
     }
     
     private class Collector extends Thread {
@@ -100,7 +108,7 @@ public class CqlMetricsCollector extends AbstractCollector {
 
         @Override
         public void run() {
-            CqlMetrics CqlMetrics = context.systemViewsDao.CqlMetrics(metricsName.name());
+            CqlMetrics CqlMetrics = dao.CqlMetrics(metricsName.name());
             LOG.debug("Metrics acquired: {}", CqlMetrics);
             metric.setValue(metricLabels, CqlMetrics.value());
         }

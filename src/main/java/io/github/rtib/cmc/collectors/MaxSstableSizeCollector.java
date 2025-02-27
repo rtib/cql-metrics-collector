@@ -16,6 +16,8 @@
 package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
+import io.github.rtib.cmc.model.DaoSystemViewsV5;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.TableSize;
 
@@ -26,6 +28,8 @@ import io.github.rtib.cmc.model.system_views.TableSize;
  */
 public class MaxSstableSizeCollector extends AbstractTableSizeCollector {
 
+    private DaoSystemViewsV5 dao;
+
     /**
      * Create the collector instance.
      */
@@ -34,11 +38,16 @@ public class MaxSstableSizeCollector extends AbstractTableSizeCollector {
     }
 
     @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV5();
+    }
+
+    @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
         return new Collector(id) {
             @Override
             protected TableSize getTableSize() {
-                return context.systemViewsDao.MaxSstableSize(table.keyspace_name(), table.table_name());
+                return dao.MaxSstableSize(table.keyspace_name(), table.table_name());
             }
         };
     }

@@ -16,6 +16,8 @@
 package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
+import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.TableSummary;
 
@@ -26,6 +28,8 @@ import io.github.rtib.cmc.model.system_views.TableSummary;
  */
 public class RowsPerReadCollector extends AbstractTableSummaryCollector {
 
+    private DaoSystemViewsV4 dao;
+
     /**
      * Create collector instance.
      */
@@ -34,11 +38,16 @@ public class RowsPerReadCollector extends AbstractTableSummaryCollector {
     }
     
     @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+    }
+
+    @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
         return new Collector(id) {
             @Override
             protected TableSummary getSummary() {
-                return context.systemViewsDao.RowsPerRead(table.keyspace_name(), table.table_name());
+                return dao.RowsPerRead(table.keyspace_name(), table.table_name());
             }
         };
     }

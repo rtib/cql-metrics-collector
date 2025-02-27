@@ -21,6 +21,8 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
 import io.github.rtib.cmc.model.system_views.ThreadPools;
@@ -42,6 +44,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
 
     private Metric metricGauge;
     private Metric metricCounter;
+    private DaoSystemViewsV4 dao;
 
     /**
      * Create the collector.
@@ -79,6 +82,11 @@ public class ThreadPoolsCollector extends AbstractCollector {
     }
 
     @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+    }
+
+    @Override
     public void deactivate() {
         super.deactivate();
         Repository.getInstance().remove(metricGauge);
@@ -92,7 +100,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
 
     @Override
     protected List<? extends MetricsIdentifier> getInstances() {
-        return context.systemViewsDao.listThreadPools().all();
+        return dao.listThreadPools().all();
     }
 
     private class Collector extends Thread {
@@ -121,7 +129,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
 
         @Override
         public void run() {
-            ThreadPools tpInstance = context.systemViewsDao.threadPool(threadpool.name());
+            ThreadPools tpInstance = dao.threadPool(threadpool.name());
             LOG.debug("Metrics acquired: {}", tpInstance);
             metricGauge.setValue(metricLabels.get("active_tasks"), tpInstance.active_tasks());
             metricGauge.setValue(metricLabels.get("active_tasks_limit"), tpInstance.active_tasks_limit());

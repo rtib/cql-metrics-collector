@@ -21,6 +21,8 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.BatchMetrics;
 import io.github.rtib.cmc.model.system_views.BatchMetricsName;
@@ -40,6 +42,7 @@ public class BatchMetricsCollector extends AbstractCollector {
     
     private Metric metricGauge;
     private Metric metricSummary;
+    private DaoSystemViewsV4 dao;
 
     /**
      * Create collector instance.
@@ -73,24 +76,29 @@ public class BatchMetricsCollector extends AbstractCollector {
         } catch (MetricException ex) {
             throw new CollectorException("Failed to initalize collector metrics.", ex);
         }
-        super.activate(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        super.activate();
     }
 
     @Override
     public void deactivate() {
-        super.deactivate(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        super.deactivate();
         Repository.getInstance().remove(metricGauge);
         Repository.getInstance().remove(metricSummary);
     }
 
     @Override
     protected List<? extends MetricsIdentifier> getInstances() {
-        return context.systemViewsDao.listBatchStatements().all();
+        return dao.listBatchStatements().all();
     }
 
     @Override
     protected Thread createCollectorTask(MetricsIdentifier id) throws MetricException {
         return new Collector(id);
+    }
+
+    @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
     }
     
     private class Collector extends Thread {
@@ -129,7 +137,7 @@ public class BatchMetricsCollector extends AbstractCollector {
 
         @Override
         public void run() {
-            BatchMetrics metrics = context.systemViewsDao.BatchMetrics(batchStatement.name());
+            BatchMetrics metrics = dao.BatchMetrics(batchStatement.name());
             LOG.debug("Metrics acquired: {}", metrics);
             metricGauge.setValue(metricLabels.get("max"), metrics.max());
             metricSummary.setValue(metricLabels.get("p50th"), metrics.p50th());

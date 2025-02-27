@@ -87,7 +87,7 @@ public abstract class AbstractLatencyCollector extends AbstractTableCollector {
                     .build();
             Repository.getInstance().add(metricRate);
         } catch (MetricException ex) {
-            throw new CollectorException("Failed to initialize collector metrics.", ex);
+            throw new CollectorException(String.format("{}: failed to initialize collector metrics.", this.getClass().getSimpleName()), ex);
         }
         super.activate();
     }

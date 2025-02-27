@@ -47,7 +47,7 @@ public abstract class AbstractTableSizeCollector extends AbstractTableCollector 
     @Override
     public void activate() throws CollectorException {
         if (!isAvailable()) {
-            LOG.info("Metrics class not supported.");
+            LOG.warn("Metrics collector class not supported: {}", this.getClass().getSimpleName());
             return;
         }
         try {

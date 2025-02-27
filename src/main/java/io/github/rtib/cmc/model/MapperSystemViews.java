@@ -29,11 +29,18 @@ import com.datastax.oss.driver.api.mapper.annotations.Mapper;
 public interface MapperSystemViews {
     
     /**
-     * Get the DaoSystemViews object.
+     * Get the DaoSystemViewsV4 object.
      * @return a DAO
      */
     @DaoFactory
-    DaoSystemViews systemViewsDao();
+    DaoSystemViewsV4 systemViewsDaoV4();
+    
+    /**
+     * Get the DaoSystemViewsV5 object.
+     * @return a DAO
+     */
+    @DaoFactory
+    DaoSystemViewsV5 systemViewsDaoV5();
     
     /**
      * Build an instance of for MapperSystemViews.

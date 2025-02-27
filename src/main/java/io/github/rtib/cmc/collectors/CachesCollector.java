@@ -21,6 +21,8 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
+import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.Caches;
@@ -42,6 +44,7 @@ public class CachesCollector extends AbstractCollector {
     
     private Metric metricGauge;
     private Metric metricCounter;
+    private DaoSystemViewsV4 dao;
 
     /**
      * Create the collector instance.
@@ -92,7 +95,12 @@ public class CachesCollector extends AbstractCollector {
 
     @Override
     protected List<? extends MetricsIdentifier> getInstances() {
-        return context.systemViewsDao.listCaches().all();
+        return dao.listCaches().all();
+    }
+
+    @Override
+    protected void setup() {
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
     }
     
     private class Collector extends Thread {
@@ -127,7 +135,7 @@ public class CachesCollector extends AbstractCollector {
 
         @Override
         public void run() {
-            Caches caches = context.systemViewsDao.caches(cacheName.name());
+            Caches caches = dao.caches(cacheName.name());
             LOG.debug("Metrics acquired: {}", caches);
             metricGauge.setValue(metricLabels.get("capacity_bytes"), caches.capacity_bytes());
             metricCounter.setValue(metricLabels.get("entry_count"), caches.entry_count());
