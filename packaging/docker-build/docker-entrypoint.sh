@@ -2,7 +2,8 @@
 set -ex
 
 # execute any provided command
-scripts/$@
+cd scripts
+$@
 
 cd ${WORKDIR}/cql-metrics-collector
 dpkg-buildpackage -us -uc -b
