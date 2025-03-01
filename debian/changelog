@@ -1,3 +1,9 @@
+cql-metrics-collector (1.0.0-alpha6) stable; urgency=medium
+
+  * Release 1.0.0-alpha6 of CQL-Metrics-Collector for Apache Cassandra.
+
+ -- Tibor Repasi <rtib@users.noreply.github.com>  Sat, 01 Mar 2025 09:44:07 +0100
+
 cql-metrics-collector (1.0.0-alpha5) stable; urgency=medium
 
   * Release 1.0.0-alpha5 of CQL-Metrics-Collector for Apache Cassandra.
