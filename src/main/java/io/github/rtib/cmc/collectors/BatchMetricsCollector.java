@@ -21,7 +21,7 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
-import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.DaoSystemViewsV41;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.BatchMetrics;
@@ -42,7 +42,7 @@ public class BatchMetricsCollector extends AbstractCollector {
     
     private Metric metricGauge;
     private Metric metricSummary;
-    private DaoSystemViewsV4 dao;
+    private DaoSystemViewsV41 dao;
 
     /**
      * Create collector instance.
@@ -98,7 +98,7 @@ public class BatchMetricsCollector extends AbstractCollector {
 
     @Override
     protected void setup() {
-        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV41();
     }
     
     private class Collector extends Thread {

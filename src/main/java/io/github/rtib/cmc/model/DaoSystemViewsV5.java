@@ -20,7 +20,9 @@ import com.datastax.oss.driver.api.mapper.annotations.Select;
 import io.github.rtib.cmc.model.system_views.MaxSstableSize;
 
 /**
- * Interface of a data access object allowing to access information within system_views.
+ * Interface of data access to system_views.
+ * 
+ * @since Cassandra v5.0
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */

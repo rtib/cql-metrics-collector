@@ -20,7 +20,7 @@ import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.Repository;
-import io.github.rtib.cmc.model.DaoSystemViewsV4;
+import io.github.rtib.cmc.model.DaoSystemViewsV41;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.CqlMetrics;
@@ -40,7 +40,7 @@ public class CqlMetricsCollector extends AbstractCollector {
     // private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);
     
     private Metric metric;
-    private DaoSystemViewsV4 dao;
+    private DaoSystemViewsV41 dao;
 
     /**
      * Initialize collector.
@@ -71,7 +71,7 @@ public class CqlMetricsCollector extends AbstractCollector {
 
     @Override
     protected void setup() {
-        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV41();
     }
 
     @Override

@@ -16,10 +16,10 @@
 package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
-import io.github.rtib.cmc.model.DaoSystemViewsV4;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.TableSize;
+import io.github.rtib.cmc.model.DaoSystemViewsV40;
 
 /**
  * Collector of max partition size for every table.
@@ -28,7 +28,7 @@ import io.github.rtib.cmc.model.system_views.TableSize;
  */
 public class MaxPartitionSizeCollector extends AbstractTableSizeCollector {
 
-    private DaoSystemViewsV4 dao;
+    private DaoSystemViewsV40 dao;
 
     /**
      * Create collector instance.
@@ -39,7 +39,7 @@ public class MaxPartitionSizeCollector extends AbstractTableSizeCollector {
 
     @Override
     protected void setup() {
-        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV40();
     }
 
     @Override

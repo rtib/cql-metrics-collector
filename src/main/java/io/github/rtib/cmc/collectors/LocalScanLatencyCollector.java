@@ -16,10 +16,10 @@
 package io.github.rtib.cmc.collectors;
 
 import io.github.rtib.cmc.metrics.MetricException;
-import io.github.rtib.cmc.model.DaoSystemViewsV4;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.Latency;
+import io.github.rtib.cmc.model.DaoSystemViewsV40;
 
 /**
  * Collect local_read_latency metrics for every table.
@@ -27,7 +27,7 @@ import io.github.rtib.cmc.model.system_views.Latency;
  */
 public final class LocalScanLatencyCollector extends AbstractLatencyCollector {
 
-    private DaoSystemViewsV4 dao;
+    private DaoSystemViewsV40 dao;
 
     /**
      * Create the collector instance.
@@ -38,7 +38,7 @@ public final class LocalScanLatencyCollector extends AbstractLatencyCollector {
 
     @Override
     protected void setup() {
-        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV40();
     }
 
     @Override

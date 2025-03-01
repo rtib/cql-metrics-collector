@@ -21,7 +21,6 @@ import io.github.rtib.cmc.metrics.Metric;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.metrics.MetricType;
 import io.github.rtib.cmc.metrics.Repository;
-import io.github.rtib.cmc.model.DaoSystemViewsV4;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
 import io.github.rtib.cmc.model.system_views.ThreadPoolName;
@@ -32,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.github.rtib.cmc.model.DaoSystemViewsV40;
 
 /**
  * Collector of thread pools metrics.
@@ -44,7 +44,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
 
     private Metric metricGauge;
     private Metric metricCounter;
-    private DaoSystemViewsV4 dao;
+    private DaoSystemViewsV40 dao;
 
     /**
      * Create the collector.
@@ -83,7 +83,7 @@ public class ThreadPoolsCollector extends AbstractCollector {
 
     @Override
     protected void setup() {
-        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV4();
+        dao = MapperSystemViews.builder(context.cqlSession).build().systemViewsDaoV40();
     }
 
     @Override

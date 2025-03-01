@@ -19,15 +19,11 @@ import com.datastax.oss.driver.api.core.PagingIterable;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Query;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
-import io.github.rtib.cmc.model.system_views.BatchMetrics;
-import io.github.rtib.cmc.model.system_views.BatchMetricsName;
 import io.github.rtib.cmc.model.system_views.CacheName;
 import io.github.rtib.cmc.model.system_views.Caches;
 import io.github.rtib.cmc.model.system_views.CoordinatorReadLatency;
 import io.github.rtib.cmc.model.system_views.CoordinatorScanLatency;
 import io.github.rtib.cmc.model.system_views.CoordinatorWriteLatency;
-import io.github.rtib.cmc.model.system_views.CqlMetrics;
-import io.github.rtib.cmc.model.system_views.CqlMetricsName;
 import io.github.rtib.cmc.model.system_views.DiskUsage;
 import io.github.rtib.cmc.model.system_views.LocalReadLatency;
 import io.github.rtib.cmc.model.system_views.LocalScanLatency;
@@ -39,12 +35,14 @@ import io.github.rtib.cmc.model.system_views.ThreadPools;
 import io.github.rtib.cmc.model.system_views.TombstonesPerRead;
 
 /**
- * Interface of a data access object allowing to access information within system_views.
+ * Interface of data access to system_views.
+ * 
+ * @since Cassandra v4.0
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
 @Dao
-public interface DaoSystemViewsV4 {
+public interface DaoSystemViewsV40 {
     // ToDo: refactor method names to common schema
     
     /**
@@ -159,21 +157,6 @@ public interface DaoSystemViewsV4 {
     RowsPerRead RowsPerRead(String keyspace_name, String table_name);
     
     /**
-     * List the names of batch statements.
-     * @return list of batch metric names
-     */
-    @Query("SELECT name FROM system_views.batch_metrics")
-    PagingIterable<BatchMetricsName> listBatchStatements();
-    
-    /**
-     * Get metrics specific to batch a given statement.
-     * @param name selector value
-     * @return metrics entity
-     */
-    @Select
-    BatchMetrics BatchMetrics(String name);
-    
-    /**
      * Get the max partition size of the given table.
      * @param keyspace_name selector value
      * @param table_name selector value
@@ -181,19 +164,4 @@ public interface DaoSystemViewsV4 {
      */
     @Select
     MaxPartitionSize MaxPartitionSize(String keyspace_name, String table_name);
-    
-    /**
-     * List the names of available CQL metrics.
-     * @return list of cql metrics
-     */
-    @Query("SELECT name FROM system_views.cql_metrics")
-    PagingIterable<CqlMetricsName> listCqlMetrics();
-    
-    /**
-     * Get the CqlMetrics for a name.
-     * @param name selector value
-     * @return metrics entity
-     */
-    @Select
-    CqlMetrics CqlMetrics(String name);
 }
