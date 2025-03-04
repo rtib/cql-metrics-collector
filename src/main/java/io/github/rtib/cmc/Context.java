@@ -16,9 +16,15 @@
 package io.github.rtib.cmc;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.metadata.Node;
+import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
+import com.datastax.oss.driver.api.core.metadata.SafeInitNodeStateListener;
+import com.datastax.oss.driver.api.core.session.Session;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import static io.github.rtib.cmc.PropertyHelper.CONFIG_ROOT_SECTION;
+import io.github.rtib.cmc.collectors.CollectorException;
+import io.github.rtib.cmc.collectors.ICollector;
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.MetricException;
@@ -39,9 +45,13 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.ServiceLoader;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,14 +61,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
-public final class Context {
-    private static final Logger LOG = LoggerFactory.getLogger(Context.class);
-    private static final Context instance = new Context();
-
-    private static final String CONFIG_RELOAD_INTERVAL = "config-reload-interval";
-    
-    private final ScheduledExecutorService adminExecutor;
-    private ScheduledFuture<?> configReloadScheduler;
+public final class Context implements NodeStateListener {
 
     /**
      * Get the singleton instance of this class.
@@ -112,8 +115,6 @@ public final class Context {
      * List of labels which will be applied to all metric instances.
      */
     public List<Label> commonLabels = Collections.emptyList();
-    
-    private Duration configReloadInterval = Duration.ZERO;
 
     /**
      * Context startup. This is creating the CQL session and setting up the
@@ -124,23 +125,6 @@ public final class Context {
         loadConfig();
         cqlConnect();
         queryExecutor = new ScheduledThreadPoolExecutor(getConfigFor("queryExecutor").getInt("corePoolSize"));
-        
-        InetSocketAddress node = new InetSocketAddress(
-                systemInfo.listen_address(),
-                systemInfo.listen_port()
-        );
-        node.getHostName(); // just resolve, no need to store the result here
-        try {
-            commonLabels = new LabelListBuilder()
-                    .addLabel("cluster", systemInfo.cluster_name())
-                    .addLabel("dc", systemInfo.data_center())
-                    .addLabel("rack", systemInfo.rack())
-                    .addLabel("node", node.toString())
-                    .build();
-        } catch (MetricException ex) {
-            LOG.atError().log("Failed to build common labels.", ex);
-            throw new ContextException("Context startup failed.", ex);
-        }
     }
 
     /**
@@ -148,8 +132,8 @@ public final class Context {
      * query executor thread pool and closing the CQL session.
      */
     void shutdown() {
-        if ((adminExecutor != null) && !adminExecutor.isShutdown())
-            adminExecutor.shutdown();
+        if ((adminScheduledTaskExecutor != null) && !adminScheduledTaskExecutor.isShutdown())
+            adminScheduledTaskExecutor.shutdown();
         
         if ((queryExecutor != null) && !queryExecutor.isShutdown())
             queryExecutor.shutdown();
@@ -179,6 +163,16 @@ public final class Context {
         LOG.debug("Getting config for class {}", clazz.getName());
         return rootConfig.getConfig(clazz.getName());
     }
+    
+    private static final Logger LOG = LoggerFactory.getLogger(Context.class);
+    private static final Context instance = new Context();
+    private static final String CONFIG_RELOAD_INTERVAL = "config-reload-interval";
+    private final ScheduledExecutorService adminScheduledTaskExecutor;
+    private final ExecutorService adminTaskExecutor;
+    
+    private InetSocketAddress contactPoint;
+    private ScheduledFuture<?> configReloadScheduler;
+    private Duration configReloadInterval = Duration.ZERO;
 
     private Context() {
         projectProperties = new Properties();
@@ -187,13 +181,36 @@ public final class Context {
         } catch (IOException ex) {
             LOG.atError().setCause(ex).log("Failed to load project properties");
         }
-        this.adminExecutor = new ScheduledThreadPoolExecutor(1);
+        adminScheduledTaskExecutor = new ScheduledThreadPoolExecutor(1);
+        adminTaskExecutor = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new ArrayBlockingQueue(5, true));
     }
 
+    private void loadConfig() {
+        LOG.info("Loading root configuration section: {}", CONFIG_ROOT_SECTION.getString());
+        ConfigFactory.invalidateCaches();
+        rootConfig = ConfigFactory.load().getConfig(CONFIG_ROOT_SECTION.getString());
+        
+        if (configReloadInterval != rootConfig.getDuration(CONFIG_RELOAD_INTERVAL)) {
+            configReloadInterval = rootConfig.getDuration(CONFIG_RELOAD_INTERVAL);
+
+            // Cancel if running
+            if (configReloadScheduler != null)
+                configReloadScheduler.cancel(false);
+
+            // Create if configured
+            if (configReloadInterval.toSeconds() > 0) {
+                LOG.info("Setting up scheduled config reload for {}", configReloadInterval);
+                configReloadScheduler = adminScheduledTaskExecutor.scheduleWithFixedDelay(
+                    new Thread(() -> loadConfig()),
+                    configReloadInterval.toSeconds(),
+                    configReloadInterval.toSeconds(),
+                    TimeUnit.SECONDS);
+            }
+        }
+    }
+    
     private void cqlConnect() throws ContextException {
         if (cqlSession == null || cqlSession.isClosed()) {
-            InetSocketAddress contactPoint;
-
             if (rootConfig.hasPath("node")) {
                 URI parsedCP;
                 try {
@@ -213,51 +230,105 @@ public final class Context {
             
             LOG.info("Connecting Cassandra node at {}", contactPoint);
 
-            cqlSession = CqlSession.builder()
-                    .addContactPoint(contactPoint)
-                    .withNodeDistanceEvaluator(new NodeDiscrimiator(contactPoint))
-                    .withApplicationName(projectProperties.getProperty("application-name"))
-                    .withApplicationVersion(projectProperties.getProperty("application-version"))
-                    .build();
-            
-            this.systemDao = MapperSystem
+            CqlSession.builder()
+                .addContactPoint(contactPoint)
+                .addNodeStateListener(new SafeInitNodeStateListener(this, false))
+                .withNodeDistanceEvaluator(new NodeDiscrimiator(contactPoint))
+                .withApplicationName(projectProperties.getProperty("application-name"))
+                .withApplicationVersion(projectProperties.getProperty("application-version"))
+                .build();
+        }
+    }
+     
+    protected final class CollectorActivator implements Runnable {
+
+        @Override
+        public void run() {
+            // ToDo: put collector activation into a recurring task of admin executor
+            for (ICollector collector : ServiceLoader.load(ICollector.class)) {
+                try {
+                    LOG.info("Activating collector: {}", collector.getClass().getSimpleName());
+                    collector.activate();
+                } catch (CollectorException ex) {
+                    LOG.atWarn().setCause(ex).log("Failed to activate {}", collector.getClass().getSimpleName());
+                }
+            }
+        }        
+    }
+        
+    protected final class SessionSetup implements Runnable {
+
+        @Override
+        public void run() {
+            systemDao = MapperSystem
                     .builder(cqlSession)
                     .build()
                     .systemDao();
-            this.systemVirtualSchemaDao = MapperSystemVirtualSchema
+            systemVirtualSchemaDao = MapperSystemVirtualSchema
                     .builder(cqlSession)
                     .build()
                     .systemVirtualSchemaDao();
-            this.systemSchemaDao = MapperSystemSchema
+            systemSchemaDao = MapperSystemSchema
                     .builder(cqlSession)
                     .build()
                     .systemSchemaDao();
-            
-            this.systemInfo = systemDao.getLocalInfo();
-        }
+
+            systemInfo = systemDao.getLocalInfo();
+
+            LOG.info("Connected to Cassandra cluster: {}", systemInfo.cluster_name());
+            LOG.info("Cassandra version: {}", systemInfo.release_version());
+            LOG.info("DC/Rack: {}/{}",
+                systemInfo.data_center(),
+                systemInfo.rack());
+
+            InetSocketAddress node = new InetSocketAddress(
+                    systemInfo.listen_address(),
+                    systemInfo.listen_port()
+            );
+            node.getHostName(); // just resolve, no need to store the result here
+            try {
+                commonLabels = new LabelListBuilder()
+                        .addLabel("cluster", systemInfo.cluster_name())
+                        .addLabel("dc", systemInfo.data_center())
+                        .addLabel("rack", systemInfo.rack())
+                        .addLabel("node", node.toString())
+                        .build();
+            } catch (MetricException ex) {
+                LOG.atError().log("Failed to build common labels.", ex);
+        //            throw new ContextException("Context startup failed.", ex);
+            }
+            adminTaskExecutor.execute(new CollectorActivator());
+        }   
     }
 
-    private void loadConfig() {
-        LOG.info("Loading root configuration section: {}", CONFIG_ROOT_SECTION.getString());
-        ConfigFactory.invalidateCaches();
-        rootConfig = ConfigFactory.load().getConfig(CONFIG_ROOT_SECTION.getString());
-        
-        if (configReloadInterval != rootConfig.getDuration(CONFIG_RELOAD_INTERVAL)) {
-            configReloadInterval = rootConfig.getDuration(CONFIG_RELOAD_INTERVAL);
+    @Override
+    public void onAdd(Node node) {
+        // that's simply not of interest here
+    }
 
-            // Cancel if running
-            if (configReloadScheduler != null)
-                configReloadScheduler.cancel(false);
+    @Override
+    public void onUp(Node node) {
+        // that's simply not of interest here
+    }
 
-            // Create if configured
-            if (configReloadInterval.toSeconds() > 0) {
-                LOG.info("Setting up scheduled config reload for {}", configReloadInterval);
-                this.configReloadScheduler = adminExecutor.scheduleWithFixedDelay(
-                    new Thread(() -> loadConfig()),
-                    configReloadInterval.toSeconds(),
-                    configReloadInterval.toSeconds(),
-                    TimeUnit.SECONDS);
-            }
-        }
+    @Override
+    public void onDown(Node node) {
+        // ToDo: add handler here
+    }
+
+    @Override
+    public void onRemove(Node node) {
+        // ToDo: add handler here
+    }
+
+    @Override
+    public void onSessionReady(Session session) {
+        cqlSession = (CqlSession) session;
+        adminTaskExecutor.execute(new SessionSetup());
+    }
+
+    @Override
+    public void close() throws Exception {
+        // that's simply not of interest here
     }
 }

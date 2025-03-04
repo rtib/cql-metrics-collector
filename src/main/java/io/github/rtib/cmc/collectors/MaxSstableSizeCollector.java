@@ -15,6 +15,7 @@
  */
 package io.github.rtib.cmc.collectors;
 
+import com.google.auto.service.AutoService;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.DaoSystemViewsV5;
 import io.github.rtib.cmc.model.MapperSystemViews;
@@ -26,6 +27,7 @@ import io.github.rtib.cmc.model.system_views.TableSize;
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
+@AutoService(ICollector.class)
 public class MaxSstableSizeCollector extends AbstractTableSizeCollector {
 
     private DaoSystemViewsV5 dao;

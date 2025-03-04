@@ -15,6 +15,7 @@
  */
 package io.github.rtib.cmc.collectors;
 
+import com.google.auto.service.AutoService;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
@@ -25,6 +26,7 @@ import io.github.rtib.cmc.model.DaoSystemViewsV40;
  * Collect local_read_latency metrics for every table.
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
+@AutoService(ICollector.class)
 public final class LocalReadLatencyCollector extends AbstractLatencyCollector {
 
     private DaoSystemViewsV40 dao;

@@ -15,6 +15,7 @@
  */
 package io.github.rtib.cmc.collectors;
 
+import com.google.auto.service.AutoService;
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.Metric;
@@ -38,6 +39,7 @@ import io.github.rtib.cmc.model.DaoSystemViewsV40;
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
+@AutoService(ICollector.class)
 public class CachesCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(CachesCollector.class);
     // private final Config config = ConfigBeanFactory.create(context.getConfigFor(this.getClass()), Config.class);

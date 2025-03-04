@@ -15,6 +15,7 @@
  */
 package io.github.rtib.cmc.collectors;
 
+import com.google.auto.service.AutoService;
 import io.github.rtib.cmc.metrics.Label;
 import io.github.rtib.cmc.metrics.LabelListBuilder;
 import io.github.rtib.cmc.metrics.Metric;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
+@AutoService(ICollector.class)
 public class BatchMetricsCollector extends AbstractCollector {
     private static final Logger LOG = LoggerFactory.getLogger(BatchMetricsCollector.class);
     

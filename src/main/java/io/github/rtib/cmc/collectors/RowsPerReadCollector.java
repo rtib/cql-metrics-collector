@@ -15,6 +15,7 @@
  */
 package io.github.rtib.cmc.collectors;
 
+import com.google.auto.service.AutoService;
 import io.github.rtib.cmc.metrics.MetricException;
 import io.github.rtib.cmc.model.MapperSystemViews;
 import io.github.rtib.cmc.model.MetricsIdentifier;
@@ -26,6 +27,7 @@ import io.github.rtib.cmc.model.DaoSystemViewsV40;
  * 
  * @author Tibor Répási {@literal <rtib@users.noreply.github.com>}
  */
+@AutoService(ICollector.class)
 public class RowsPerReadCollector extends AbstractTableSummaryCollector {
 
     private DaoSystemViewsV40 dao;
