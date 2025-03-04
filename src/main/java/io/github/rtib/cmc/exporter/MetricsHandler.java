@@ -54,7 +54,8 @@ public class MetricsHandler implements HttpHandler {
         } finally {
             exchange.close();
         }
-        LOG.atInfo().log("{} {} {} {} {}", 
+        LOG.atInfo().log("{} {} {} {} {} {}", 
+                exchange.getRequestHeaders().getFirst("User-Agent"),
                 exchange.getRemoteAddress(),
                 exchange.getProtocol(),
                 exchange.getRequestMethod(),

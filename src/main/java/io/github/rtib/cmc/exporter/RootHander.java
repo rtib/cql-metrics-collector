@@ -61,12 +61,13 @@ public class RootHander implements HttpHandler {
             exchange.close();
         }
         LOG.atInfo().log("{} {} {} {} {} {}", 
+                exchange.getRequestHeaders().getFirst("User-Agent"),
                 exchange.getRemoteAddress(),
                 exchange.getProtocol(),
                 exchange.getRequestMethod(),
                 exchange.getRequestURI(),
-                exchange.getResponseCode(),
-                responseBytes.length
+                exchange.getResponseCode()
+                
         );
     }
 }
