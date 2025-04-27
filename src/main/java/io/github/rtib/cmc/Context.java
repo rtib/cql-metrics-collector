@@ -121,19 +121,21 @@ public final class Context implements NodeStateListener {
      * thread pool executing CQL queries.
      * @throws ContextException 
      */
-    void startup() throws ContextException {
+    public void startup() throws ContextException {
         loadConfig();
         cqlConnect();
-        queryExecutor = new ScheduledThreadPoolExecutor(getConfigFor("queryExecutor").getInt("corePoolSize"));
     }
 
     /**
      * Shut the context down. This is shutting down admin task thread pool,
      * query executor thread pool and closing the CQL session.
      */
-    void shutdown() {
+    public void shutdown() {
         if ((adminScheduledTaskExecutor != null) && !adminScheduledTaskExecutor.isShutdown())
             adminScheduledTaskExecutor.shutdown();
+
+        if ((adminTaskExecutor != null) && !adminTaskExecutor.isShutdown())
+            adminTaskExecutor.shutdown();
         
         if ((queryExecutor != null) && !queryExecutor.isShutdown())
             queryExecutor.shutdown();
@@ -246,8 +248,12 @@ public final class Context implements NodeStateListener {
         public void run() {
             // ToDo: put collector activation into a recurring task of admin executor
             for (ICollector collector : ServiceLoader.load(ICollector.class)) {
+                LOG.debug("Collector {} is enabled: {}", collector.getClass().getSimpleName(), collector.isEnabled());
+                if (!collector.isEnabled())
+                    continue;
+                
                 try {
-                    LOG.info("Activating collector: {}", collector.getClass().getSimpleName());
+                    LOG.info("Activating collector: {}, enabled: {}", collector.getClass().getSimpleName(), collector.isEnabled());
                     collector.activate();
                 } catch (CollectorException ex) {
                     LOG.atWarn().setCause(ex).log("Failed to activate {}", collector.getClass().getSimpleName());
@@ -295,8 +301,8 @@ public final class Context implements NodeStateListener {
                         .build();
             } catch (MetricException ex) {
                 LOG.atError().log("Failed to build common labels.", ex);
-        //            throw new ContextException("Context startup failed.", ex);
             }
+            queryExecutor = new ScheduledThreadPoolExecutor(getConfigFor("queryExecutor").getInt("corePoolSize"));
             adminTaskExecutor.execute(new CollectorActivator());
         }   
     }

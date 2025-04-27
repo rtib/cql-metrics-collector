@@ -28,6 +28,19 @@ public interface ICollector {
     boolean isEnabled();
     
     /**
+     * Check if the source for the collector is available in the underlying
+     * Cassandra version.
+     * @return true if the collector is available, false otherwise
+     */
+    boolean isAvailable();
+
+    /**
+     * Return whether the collector is currently active.
+     * @return true if collector is active
+     */
+    boolean isActive();
+    
+    /**
      * Activate the collector instance by setting up its metrics and update
      * task.
      * @throws CollectorException in case of any failure preventing activation.
@@ -40,12 +53,5 @@ public interface ICollector {
      * repository.
      */
     void deactivate();
-
-    /**
-     * Check if the source for the collector is available in the underlying
-     * Cassandra version.
-     * @return true if the collector is available, false otherwise
-     */
-    boolean isAvailable();
     
 }

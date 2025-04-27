@@ -61,6 +61,8 @@ public abstract class AbstractCollector implements ICollector {
      * Source table.
      */
     protected final String TABLE;
+    
+    protected boolean active = false;
 
     /**
      * Scheduled task for updating collector task instances.
@@ -77,7 +79,12 @@ public abstract class AbstractCollector implements ICollector {
 
     @Override
     public boolean isEnabled() {
-        return context.getConfigFor(this.getClass()).getBoolean("enabled");
+        return config.isEnabled();
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
     }
 
     @Override
@@ -89,10 +96,12 @@ public abstract class AbstractCollector implements ICollector {
                 ThreadLocalRandom.current().nextLong(config.getUpdateInitialDelay().toSeconds()),
                 updateInterval.getSeconds(), TimeUnit.SECONDS);
         setup();
+        active = true;
     }
 
     @Override
     public void deactivate() {
+        active = false;
         LOG.info("Shutting down {}", this.getClass().getSimpleName());
         if ((updateTask != null) || !updateTask.isCancelled())
             updateTask.cancel(true);
@@ -220,10 +229,27 @@ public abstract class AbstractCollector implements ICollector {
      * Configuration bean for all kinds of collectors.
      */
     protected static class CollectorConfig {
+        private boolean enabled;
         private Duration metricsCollectionInterval;
         private Duration updateInterval;
         private Duration updateInitialDelay;
 
+        /**
+         * Collector configured to be enabled.
+         * @return whether the collector is configured enabled
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        /**
+         * Set whether or not this collector should be enabled.
+         * @param enabled 
+         */
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+        
         /**
          * Get the initial delay of starting the update task.
          * @return initial delay
