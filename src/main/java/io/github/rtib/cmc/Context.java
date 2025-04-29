@@ -319,12 +319,12 @@ public final class Context implements NodeStateListener {
 
     @Override
     public void onDown(Node node) {
-        // ToDo: add handler here
+        shutdown();
     }
 
     @Override
     public void onRemove(Node node) {
-        // ToDo: add handler here
+        shutdown();
     }
 
     @Override
